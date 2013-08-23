@@ -8,7 +8,7 @@ module PaynetEasy
     end
     module Transport
     end
-    module Utils
+    module Util
     end
   end
 end

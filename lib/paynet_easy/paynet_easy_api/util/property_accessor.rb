@@ -1,6 +1,6 @@
 require 'contracts'
 
-module PaynetEasy::PaynetEasyApi::Utils
+module PaynetEasy::PaynetEasyApi::Util
   module PropertyAccessor
     include Contracts
 

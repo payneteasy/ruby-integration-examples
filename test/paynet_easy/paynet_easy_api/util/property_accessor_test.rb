@@ -1,8 +1,8 @@
 require 'test/unit'
 require 'paynet_easy_api'
-require 'utils/property_accessor'
+require 'util/property_accessor'
 
-module PaynetEasy::PaynetEasyApi::Utils
+module PaynetEasy::PaynetEasyApi::Util
   class PropertyAccessorTest < Test::Unit::TestCase
 
     def test_get_value
