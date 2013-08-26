@@ -1,5 +1,16 @@
 require 'contracts'
-require 'data'
+require 'payment_data/data'
+
+# :KLUDGE:    Imenem    22.08.2013
+#
+# Prevent error "Uninitialized constant PaymentTransaction" in Payment
+module PaynetEasy::PaynetEasyApi::PaymentData
+  class PaymentTransaction < Data
+  end
+end
+
+require 'payment_data/payment'
+require 'payment_data/query_config'
 
 module PaynetEasy::PaynetEasyApi::PaymentData
   class PaymentTransaction < Data
@@ -77,7 +88,7 @@ module PaynetEasy::PaynetEasyApi::PaymentData
     # @var  [Array]
     attr_accessor :errors
 
-    Contract String => None
+    Contract String => Any
     def processor_type=(processor_type)
       unless @@allowed_processor_types.include? processor_type
         raise ArgumentError, "Unknown transaction processor type given: '#{processor_type}'"
@@ -90,7 +101,7 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       @processor_type = processor_type
     end
 
-    Contract String => None
+    Contract String => Any
     def processor_name=(processor_name)
       if @processor_name
         raise RuntimeError, 'You can set payment transaction processor name only once'
@@ -99,7 +110,7 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       @processor_name = processor_name
     end
 
-    Contract String => None
+    Contract String => Any
     def status=(status)
       unless @@allowed_statuses.include? status
         raise ArgumentError, "Unknown transaction status given: '#{status}'"
@@ -142,7 +153,7 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       !new? && !processing?
     end
 
-    Contract Payment => None
+    Contract Payment => Any
     def payment=(payment)
       @payment = payment
 
@@ -156,7 +167,7 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       @payment ||= Payment.new
     end
 
-    Contract QueryConfig => None
+    Contract QueryConfig => Any
     def query_config=(query_config)
       @query_config = query_config
     end
@@ -166,12 +177,12 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       @query_config ||= QueryConfig.new
     end
 
-    Contract None => ArrayOf[Exception]
+    Contract None => ArrayOf[IsA[Exception]]
     def errors
       @errors ||= []
     end
 
-    Contract Exception => None
+    Contract IsA[Exception] => Any
     def add_error(error)
       unless errors.include? error
         errors << error
@@ -183,9 +194,9 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       errors.any?
     end
 
-    Contract None => Or[Exception, None]
+    Contract None => Maybe[IsA[Exception]]
     def last_error
-      errors.first if has_errors?
+      errors.last if has_errors?
     end
   end
 end

@@ -1,5 +1,5 @@
 require 'contracts'
-require 'data'
+require 'payment_data/data'
 
 module PaynetEasy::PaynetEasyApi::PaymentData
   class CreditCard < Data
@@ -30,7 +30,7 @@ module PaynetEasy::PaynetEasyApi::PaymentData
     # @var [String]
     attr_accessor :expire_month
 
-    Contract String => None
+    Contract String => Any
     def credit_card_number=(credit_card_number)
       @credit_card_number = credit_card_number.delete(' -_.,')
     end

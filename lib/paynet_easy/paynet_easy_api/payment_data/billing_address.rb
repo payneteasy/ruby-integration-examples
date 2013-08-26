@@ -1,4 +1,4 @@
-require 'data'
+require 'payment_data/data'
 
 module PaynetEasy::PaynetEasyApi::PaymentData
   class BillingAddress < Data

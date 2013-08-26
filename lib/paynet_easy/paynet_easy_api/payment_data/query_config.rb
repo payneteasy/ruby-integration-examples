@@ -1,5 +1,5 @@
 require 'contracts'
-require 'data'
+require 'payment_data/data'
 
 module PaynetEasy::PaynetEasyApi::PaymentData
   class QueryConfig < Data
@@ -63,7 +63,7 @@ module PaynetEasy::PaynetEasyApi::PaymentData
     # @var [String]
     attr_accessor :gateway_url_production
 
-    Contract String => None
+    Contract String => Any
     def gateway_mode=(gateway_mode)
       check_gateway_mode gateway_mode
       @gateway_mode = gateway_mode
@@ -83,6 +83,7 @@ module PaynetEasy::PaynetEasyApi::PaymentData
 
     protected
 
+    Contract String => Any
     # Checks, is gateway mode allowed or not
     #
     # @param    gateway_mode    [String]    Gateway mode to check
