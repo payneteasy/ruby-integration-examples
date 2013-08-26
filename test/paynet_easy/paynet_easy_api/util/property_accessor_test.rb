@@ -14,7 +14,7 @@ module PaynetEasy::PaynetEasyApi::Util
       ]
       .each do |property_path, expected_value, fail_on_error|
         actual_value = PropertyAccessor.get_value TestObject.new, property_path, fail_on_error
-        assert_equal expected_value, actual_value
+        assert_equal expected_value, actual_value, "On property path #{property_path}"
       end
     end
 

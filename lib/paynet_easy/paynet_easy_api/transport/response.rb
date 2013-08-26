@@ -1,4 +1,5 @@
 require 'contracts'
+require 'error/paynet_error'
 
 module PaynetEasy::PaynetEasyApi::Transport
   class Response < Hash
@@ -133,6 +134,14 @@ module PaynetEasy::PaynetEasyApi::Transport
     Contract None => Bool
     def error?
       %w(validation-error error).include?(type) || status == 'error'
+    end
+
+    def error
+      if error? || declined?
+        PaynetError.new error_message
+      else
+        raise RuntimeError, 'Response has no error'
+      end
     end
 
     protected
