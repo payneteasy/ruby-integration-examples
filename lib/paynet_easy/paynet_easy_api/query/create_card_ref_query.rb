@@ -4,7 +4,7 @@ require 'util/validator'
 require 'error/validation_error'
 
 module PaynetEasy::PaynetEasyApi::Query
-  class CaptureQuery < Prototype::Query
+  class CreateCardRefQuery < Prototype::Query
     include Contracts
     include PaynetEasy::PaynetEasyApi::PaymentData
     include PaynetEasy::PaynetEasyApi::Util
@@ -13,17 +13,17 @@ module PaynetEasy::PaynetEasyApi::Query
     @@request_fields_definition =
     [
       # mandatory
-      ['client_orderid',     'payment.clientId',             true,   Validator::ID],
-      ['orderid',            'payment.paynetId',             true,   Validator::ID],
-      ['login',              'queryConfig.login',            true,   Validator::MEDIUM_STRING]
+      ['client_orderid',     'payment.client_id',             true,   Validator::ID],
+      ['orderid',            'payment.paynet_id',             true,   Validator::ID],
+      ['login',              'query_config.login',            true,   Validator::MEDIUM_STRING]
     ]
 
     @@signature_definition =
     [
-      'queryConfig.login',
-      'payment.clientId',
-      'payment.paynetId',
-      'queryConfig.signingKey'
+      'query_config.login',
+      'payment.client_id',
+      'payment.paynet_id',
+      'query_config.signing_key'
     ]
 
     @@response_fields_definition =

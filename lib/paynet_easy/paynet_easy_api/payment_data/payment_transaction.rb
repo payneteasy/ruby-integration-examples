@@ -158,7 +158,7 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       @payment = payment
 
       unless @payment.has_payment_transaction? self
-        @payment.add_payment_transction self
+        @payment.add_payment_transaction self
       end
     end
 

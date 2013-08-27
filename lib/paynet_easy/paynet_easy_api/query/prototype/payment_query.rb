@@ -4,7 +4,7 @@ require 'error/validation_error'
 module PaynetEasy::PaynetEasyApi::Query::Prototype
   class PaymentQuery < Query
     # Status for payment, when it is processing by this query
-    @@payment_status
+    @@payment_status = ''
 
     @@response_fields_definition =
     [

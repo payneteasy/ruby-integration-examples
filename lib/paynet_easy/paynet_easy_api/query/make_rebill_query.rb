@@ -10,26 +10,26 @@ module PaynetEasy::PaynetEasyApi::Query
     @@request_fields_definition =
     [
       # mandatory
-      ['client_orderid',         'payment.clientId',                             true,    Validator::ID],
+      ['client_orderid',         'payment.client_id',                            true,    Validator::ID],
       ['order_desc',             'payment.description',                          true,    Validator::LONG_STRING],
       ['amount',                 'payment.amount',                               true,    Validator::AMOUNT],
       ['currency',               'payment.currency',                             true,    Validator::CURRENCY],
-      ['ipaddress',              'payment.customer.ipAddress',                   true,    Validator::IP],
-      ['cardrefid',              'payment.recurrentCardFrom.paynetId',           true,    Validator::ID],
-      ['login',                  'queryConfig.login',                            true,    Validator::MEDIUM_STRING],
+      ['ipaddress',              'payment.customer.ip_address',                  true,    Validator::IP],
+      ['cardrefid',              'payment.recurrent_card_from.paynet_id',        true,    Validator::ID],
+      ['login',                  'query_config.login',                           true,    Validator::MEDIUM_STRING],
       # optional
       ['comment',                'payment.comment',                              false,   Validator::MEDIUM_STRING],
-      ['cvv2',                   'payment.recurrentCardFrom.cvv2',               false,   Validator::CVV2],
-      ['server_callback_url',    'queryConfig.callbackUrl',                      false,   Validator::URL]
+      ['cvv2',                   'payment.recurrent_card_from.cvv2',             false,   Validator::CVV2],
+      ['server_callback_url',    'query_config.callback_url',                    false,   Validator::URL]
     ]
 
     @@signature_definition =
     [
-      'queryConfig.endPoint',
-      'payment.clientId',
-      'payment.amountInCents',
-      'payment.recurrentCardFrom.paynetId',
-      'queryConfig.signingKey'
+      'query_config.end_point',
+      'payment.client_id',
+      'payment.amount_in_cents',
+      'payment.recurrent_card_from.paynet_id',
+      'query_config.signing_key'
     ]
 
     @@payment_status = Payment::STATUS_CAPTURE

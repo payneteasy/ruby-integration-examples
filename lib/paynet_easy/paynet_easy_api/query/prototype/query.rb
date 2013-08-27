@@ -36,9 +36,8 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     @@response_fields_definition = []
 
     # Success response type
-    @@success_response_type
+    @@success_response_type = ''
 
-    Contract String => Any
     def initialize(api_method)
       @api_method = api_method
     end
@@ -87,7 +86,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
         send validate, payment_transaction, response
       rescue Exception => error
         payment_transaction.add_error error
-        payment_transaction.status PaymentTransaction::STATUS_ERROR
+        payment_transaction.status = PaymentTransaction::STATUS_ERROR
 
         raise error
       end
@@ -148,7 +147,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     #
     # @return                         [Request]               Request object
     def payment_transaction_to_request(payment_transaction)
-      request_fields = []
+      request_fields = {}
 
       @@request_fields_definition.each do |field_name, property_path, _|
         field_value = PropertyAccessor.get_value payment_transaction, property_path
@@ -272,7 +271,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       payment_id  = payment_transaction.payment.client_id
       response_id = response.payment_client_id
 
-      if response_id && payment_id != response_id
+      if response_id && payment_id.to_s != response_id.to_s   # Different types with equal values must pass validation
         raise ValidationError, "Response client_id '#{response_id}' does not match Payment client_id '#{payment_id}'"
       end
     end

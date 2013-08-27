@@ -10,36 +10,36 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     @@response_fields_definition =
     [
       # mandatory
-      ['client_orderid',         'payment.clientId',                     true,   Validator::ID],
+      ['client_orderid',         'payment.client_id',                    true,   Validator::ID],
       ['order_desc',             'payment.description',                  true,   Validator::LONG_STRING],
       ['amount',                 'payment.amount',                       true,   Validator::AMOUNT],
       ['currency',               'payment.currency',                     true,   Validator::CURRENCY],
-      ['address1',               'payment.billingAddress.firstLine',     true,   Validator::MEDIUM_STRING],
-      ['city',                   'payment.billingAddress.city',          true,   Validator::MEDIUM_STRING],
-      ['zip_code',               'payment.billingAddress.zipCode',       true,   Validator::ZIP_CODE],
-      ['country',                'payment.billingAddress.country',       true,   Validator::COUNTRY],
-      ['phone',                  'payment.billingAddress.phone',         true,   Validator::PHONE],
-      ['ipaddress',              'payment.customer.ipAddress',           true,   Validator::IP],
+      ['address1',               'payment.billing_address.first_line',   true,   Validator::MEDIUM_STRING],
+      ['city',                   'payment.billing_address.city',         true,   Validator::MEDIUM_STRING],
+      ['zip_code',               'payment.billing_address.zip_code',     true,   Validator::ZIP_CODE],
+      ['country',                'payment.billing_address.country',      true,   Validator::COUNTRY],
+      ['phone',                  'payment.billing_address.phone',        true,   Validator::PHONE],
+      ['ipaddress',              'payment.customer.ip_address',          true,   Validator::IP],
       ['email',                  'payment.customer.email',               true,   Validator::EMAIL],
-      ['redirect_url',           'queryConfig.redirectUrl',              true,   Validator::URL],
+      ['redirect_url',           'query_config.redirect_url',            true,   Validator::URL],
       # optional
-      ['first_name',             'payment.customer.firstName',           false,  Validator::MEDIUM_STRING],
-      ['last_name',              'payment.customer.lastName',            false,  Validator::MEDIUM_STRING],
+      ['first_name',             'payment.customer.first_name',          false,  Validator::MEDIUM_STRING],
+      ['last_name',              'payment.customer.last_name',           false,  Validator::MEDIUM_STRING],
       ['ssn',                    'payment.customer.ssn',                 false,  Validator::SSN],
       ['birthday',               'payment.customer.birthday',            false,  Validator::DATE],
-      ['state',                  'payment.billingAddress.state',         false,  Validator::COUNTRY],
-      ['cell_phone',             'payment.billingAddress.cellPhone',     false,  Validator::PHONE],
-      ['site_url',               'queryConfig.siteUrl',                  false,  Validator::URL],
-      ['server_callback_url',    'queryConfig.callbackUrl',              false,  Validator::URL]
+      ['state',                  'payment.billing_address.state',        false,  Validator::COUNTRY],
+      ['cell_phone',             'payment.billing_address.cell_phone',   false,  Validator::PHONE],
+      ['site_url',               'query_config.site_url',                false,  Validator::URL],
+      ['server_callback_url',    'query_config.callback_url',            false,  Validator::URL]
     ]
 
     @@signature_definition =
     [
-      'queryConfig.endPoint',
-      'payment.clientId',
-      'payment.amountInCents',
+      'query_config.end_point',
+      'payment.client_id',
+      'payment.amount_in_cents',
       'payment.customer.email',
-      'queryConfig.signingKey'
+      'query_config.signing_key'
     ]
 
     @@response_fields_definition =

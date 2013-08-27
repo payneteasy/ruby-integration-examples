@@ -23,7 +23,6 @@ module PaynetEasy::PaynetEasyApi::Transport
 
     attr_accessor :needed_action
 
-    Contract Hash => Any
     def initialize(response = {})
       super Hash[response.map {|key, value| [key, value.strip]}]
     end
@@ -69,7 +68,7 @@ module PaynetEasy::PaynetEasyApi::Transport
 
     Contract None => Maybe[String]
     def status
-      if !fetch('status') && !%w(validation-error error).include?(type)
+      if !fetch('status', nil) && !%w(validation-error error).include?(type)
         store 'status', 'processing'
       end
 

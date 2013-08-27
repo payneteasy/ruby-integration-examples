@@ -76,8 +76,9 @@ module PaynetEasy::PaynetEasyApi::PaymentData
     #                       production gateway url if gateway mode is production
     def gateway_url
       case gateway_mode
-        when GATEWAY_MODE_SANDBOX     then gateway_url_sandbox
-        when GATEWAY_MODE_PRODUCTION  then gateway_url_production
+      when GATEWAY_MODE_SANDBOX     then gateway_url_sandbox
+      when GATEWAY_MODE_PRODUCTION  then gateway_url_production
+      else raise RuntimeError, 'You must set gateway_mode property first'
       end
     end
 

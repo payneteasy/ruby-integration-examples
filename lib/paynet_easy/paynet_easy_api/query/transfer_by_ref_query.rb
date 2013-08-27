@@ -10,29 +10,30 @@ module PaynetEasy::PaynetEasyApi::Query
     @@request_fields_definition =
     [
       # mandatory
-      ['client_orderid',             'payment.clientId',                             true,    Validator::ID],
+      ['client_orderid',             'payment.client_id',                            true,    Validator::ID],
       ['amount',                     'payment.amount',                               true,    Validator::AMOUNT],
       ['currency',                   'payment.currency',                             true,    Validator::CURRENCY],
-      ['ipaddress',                  'payment.customer.ipAddress',                   true,    Validator::IP],
-      ['destination-card-ref-id',    'payment.recurrentCardTo.paynetId',             true,    Validator::ID],
-      ['login',                      'queryConfig.login',                            true,    Validator::MEDIUM_STRING],
+      ['ipaddress',                  'payment.customer.ip_address',                  true,    Validator::IP],
+      ['destination-card-ref-id',    'payment.recurrent_card_to.paynet_id',          true,    Validator::ID],
+      ['login',                      'query_config.login',                           true,
+       Validator::MEDIUM_STRING],
       # optional
       ['order_desc',                 'payment.description',                          false,   Validator::LONG_STRING],
-      ['source-card-ref-id',         'payment.recurrentCardFrom.paynetId',           false,   Validator::ID],
-      ['cvv2',                       'payment.recurrentCardFrom.cvv2',               false,   Validator::CVV2],
-      ['redirect_url',               'queryConfig.redirectUrl',                      false,   Validator::URL],
-      ['server_callback_url',        'queryConfig.callbackUrl',                      false,   Validator::URL]
+      ['source-card-ref-id',         'payment.recurrent_card_from.paynet_id',        false,   Validator::ID],
+      ['cvv2',                       'payment.recurrent_card_from.cvv2',             false,   Validator::CVV2],
+      ['redirect_url',               'query_config.redirect_url',                    false,   Validator::URL],
+      ['server_callback_url',        'query_config.callback_url',                    false,   Validator::URL]
     ]
 
     @@signature_definition =
     [
-      'queryConfig.login',
-      'payment.clientId',
-      'payment.recurrentCardFrom.paynetId',
-      'payment.recurrentCardTo.paynetId',
-      'payment.amountInCents',
+      'query_config.login',
+      'payment.client_id',
+      'payment.recurrent_card_from.paynet_id',
+      'payment.recurrent_card_to.paynet_id',
+      'payment.amount_in_cents',
       'payment.currency',
-      'queryConfig.signingKey'
+      'query_config.signing_key'
     ]
 
     @@payment_status = Payment::STATUS_CAPTURE

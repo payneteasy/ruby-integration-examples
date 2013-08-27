@@ -9,7 +9,6 @@ module PaynetEasy::PaynetEasyApi::Transport
     attr_accessor :gateway_url
     attr_reader :request_fields
 
-    Contract Maybe[Hash] => Any
     def initialize(request_fields = {})
       @request_fields = request_fields
     end

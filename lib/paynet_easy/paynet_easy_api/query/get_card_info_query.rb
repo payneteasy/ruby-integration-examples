@@ -8,15 +8,15 @@ module PaynetEasy::PaynetEasyApi::Query
     @@request_fields_definition =
     [
       # mandatory
-      ['cardrefid',          'payment.recurrentCardFrom.paynetId',           true,    Validator::ID],
-      ['login',              'queryConfig.login',                            true,    Validator::MEDIUM_STRING]
+      ['cardrefid',          'payment.recurrent_card_from.paynet_id',         true,    Validator::ID],
+      ['login',              'query_config.login',                            true,    Validator::MEDIUM_STRING]
     ]
 
     @@signature_definition =
     [
-      'queryConfig.login',
-      'payment.recurrentCardFrom.paynetId',
-      'queryConfig.signingKey'
+      'query_config.login',
+      'payment.recurrent_card_from.paynet_id',
+      'query_config.signing_key'
     ]
 
     @@response_fields_definition =
