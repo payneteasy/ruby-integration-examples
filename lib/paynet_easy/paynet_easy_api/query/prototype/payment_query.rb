@@ -4,9 +4,9 @@ require 'error/validation_error'
 module PaynetEasy::PaynetEasyApi::Query::Prototype
   class PaymentQuery < Query
     # Status for payment, when it is processing by this query
-    @@payment_status = ''
+    @payment_status = ''
 
-    @@response_fields_definition =
+    @response_fields_definition =
     [
       'type',
       'status',
@@ -15,15 +15,24 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       'serial-number'
     ]
 
-    @@success_response_type = 'async-response'
+    @success_response_type = 'async-response'
 
-    # @param    payment_transaction   [PaymentTransaction]
+    class << self;
+      protected
+
+      # @return   [String]
+      def payment_status
+        @payment_status
+      end
+    end
+
+      # @param    payment_transaction   [PaymentTransaction]
     #
     # @return                         [Request]
     def create_request(payment_transaction)
       request = super payment_transaction
 
-      payment_transaction.payment.status  = @@payment_status
+      payment_transaction.payment.status  = payment_status
       payment_transaction.processor_type  = PaymentTransaction::PROCESSOR_QUERY
       payment_transaction.processor_name  = @api_method
       payment_transaction.status          = PaymentTransaction::STATUS_PROCESSING
@@ -49,9 +58,14 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     def validate_query_definition
       super
 
-      unless @@payment_status
-        raise RuntimeError, 'You must configure @@payment_status'
+      unless payment_status
+        raise RuntimeError, 'You must configure @payment_status'
       end
+    end
+
+    # @return   [String]
+    def payment_status
+      self.class.instance_variable_get :@payment_status
     end
   end
 end

@@ -5,21 +5,21 @@ module PaynetEasy::PaynetEasyApi::Query
   class GetCardInfoQuery < Prototype::Query
     include PaynetEasy::PaynetEasyApi::Util
 
-    @@request_fields_definition =
+    @request_fields_definition =
     [
       # mandatory
       ['cardrefid',          'payment.recurrent_card_from.paynet_id',         true,    Validator::ID],
       ['login',              'query_config.login',                            true,    Validator::MEDIUM_STRING]
     ]
 
-    @@signature_definition =
+    @signature_definition =
     [
       'query_config.login',
       'payment.recurrent_card_from.paynet_id',
       'query_config.signing_key'
     ]
 
-    @@response_fields_definition =
+    @response_fields_definition =
     [
       'type',
       'card-printed-name',
@@ -30,7 +30,7 @@ module PaynetEasy::PaynetEasyApi::Query
       'serial-number'
     ]
 
-    @@success_response_type = 'get-card-info-response'
+    @success_response_type = 'get-card-info-response'
 
     protected
 

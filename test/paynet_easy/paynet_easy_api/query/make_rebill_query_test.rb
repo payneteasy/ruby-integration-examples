@@ -4,16 +4,8 @@ require 'payment_data/customer'
 require 'payment_data/recurrent_card'
 
 module PaynetEasy::PaynetEasyApi::Query
-  class MakeRebillQueryTest < Prototype::PaymentQueryTest
-    def initialize(test_name)
-      super test_name
-      @payment_status = Payment::STATUS_CAPTURE
-      @api_method     = 'make-rebill'
-    end
-
-    def setup
-      @object = MakeRebillQuery.new @api_method
-    end
+  class MakeRebillQueryTest < Test::Unit::TestCase
+    include Prototype::PaymentQueryTest
 
     def test_create_request
       [
@@ -50,6 +42,18 @@ module PaynetEasy::PaynetEasyApi::Query
           'cvv2'                  => 123
         })
       })
+    end
+
+    def payment_status
+      Payment::STATUS_CAPTURE
+    end
+
+    def api_method
+      'make-rebill'
+    end
+
+    def query
+      MakeRebillQuery.new api_method
     end
   end
 end

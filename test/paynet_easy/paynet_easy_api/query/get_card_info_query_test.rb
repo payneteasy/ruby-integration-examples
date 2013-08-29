@@ -3,15 +3,8 @@ require 'query/get_card_info_query'
 require 'payment_data/recurrent_card'
 
 module PaynetEasy::PaynetEasyApi::Query
-  class GetCardInfoQueryTest < Prototype::SyncQueryTest
-    def initialize(test_name)
-      super test_name
-      @success_type = 'get-card-info-response'
-    end
-
-    def setup
-      @object = GetCardInfoQuery.new '_'
-    end
+  class GetCardInfoQueryTest < Test::Unit::TestCase
+    include Prototype::SyncQueryTest
 
     def test_create_request
       [
@@ -28,7 +21,7 @@ module PaynetEasy::PaynetEasyApi::Query
     def test_process_response_approved
       [
         {
-          'type'              =>  @success_type,
+          'type'              =>  success_type,
           'paynet-order-id'   =>  PAYNET_ID,
           'merchant-order-id' =>  CLIENT_ID,
           'serial-number'     => '_',
@@ -48,7 +41,7 @@ module PaynetEasy::PaynetEasyApi::Query
       recurrent_card      = payment_transaction.payment.recurrent_card_from
       response_object     = Response.new response
 
-      @object.process_response payment_transaction, response_object
+      query.process_response payment_transaction, response_object
 
       assert_equal response_object['card-printed-name'],  recurrent_card.card_printed_name
       assert_equal response_object['expire-year'],        recurrent_card.expire_year
@@ -72,14 +65,14 @@ module PaynetEasy::PaynetEasyApi::Query
       })
 
       assert_raise ValidationError, "Response client_id 'invalid' does not match Payment client_id" do
-        @object.process_response payment_transaction, response
+        query.process_response payment_transaction, response
       end
     end
 
     def test_process_success_response_with_invalid_id
       response = Response.new(
       {
-        'type'              => @success_type,
+        'type'              => success_type,
         'paynet-order-id'   => '_',
         'merchant-order-id' => '_',
         'serial-number'     => '_',
@@ -94,13 +87,12 @@ module PaynetEasy::PaynetEasyApi::Query
       })
 
       assert_raise ValidationError, "Response client_id '_' does not match Payment client_id" do
-        @object.process_response payment_transaction, response
+        query.process_response payment_transaction, response
       end
     end
 
     protected
 
-    # @return   [Payment]
     def payment
       Payment.new(
       {
@@ -111,6 +103,14 @@ module PaynetEasy::PaynetEasyApi::Query
           'paynet_id'             => RECURRENT_CARD_FROM_ID
         })
       })
+    end
+
+    def success_type
+      'get-card-info-response'
+    end
+
+    def query
+      GetCardInfoQuery.new '_'
     end
   end
 end

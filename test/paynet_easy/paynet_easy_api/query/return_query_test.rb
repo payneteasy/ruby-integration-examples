@@ -2,16 +2,8 @@ require_relative './prototype/payment_query_test'
 require 'query/return_query'
 
 module PaynetEasy::PaynetEasyApi::Query
-  class ReturnQueryTest < Prototype::PaymentQueryTest
-    def initialize(test_name)
-      super test_name
-      @payment_status = Payment::STATUS_RETURN
-      @api_method     = 'return'
-    end
-
-    def setup
-      @object = ReturnQuery.new @api_method
-    end
+  class ReturnQueryTest < Test::Unit::TestCase
+    include Prototype::PaymentQueryTest
 
     def test_create_request
       [
@@ -33,13 +25,12 @@ module PaynetEasy::PaynetEasyApi::Query
       payment_transaction.payment.status = Payment::STATUS_RETURN
 
       assert_raise ValidationError, 'Payment must be paid up to return funds' do
-        @object.create_request payment_transaction
+        query.create_request payment_transaction
       end
     end
 
     protected
 
-    # @return   [Payment]
     def payment
       Payment.new(
       {
@@ -50,6 +41,18 @@ module PaynetEasy::PaynetEasyApi::Query
         'comment'               => 'cancel payment',
         'status'                =>  Payment::STATUS_CAPTURE
       })
+    end
+
+    def payment_status
+      Payment::STATUS_RETURN
+    end
+
+    def api_method
+      'return'
+    end
+
+    def query
+      ReturnQuery.new api_method
     end
   end
 end

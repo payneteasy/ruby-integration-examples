@@ -4,16 +4,8 @@ require 'payment_data/customer'
 require 'payment_data/billing_address'
 
 module PaynetEasy::PaynetEasyApi::Query
-  class SaleFormQueryTest < Prototype::PaymentQueryTest
-    def initialize(test_name)
-      super test_name
-      @payment_status = Payment::STATUS_CAPTURE
-      @api_method     = 'sale-form'
-    end
-
-    def setup
-      @object = SaleFormQuery.new @api_method
-    end
+  class SaleFormQueryTest < Test::Unit::TestCase
+    include Prototype::PaymentQueryTest
 
     def test_create_request
       [
@@ -32,7 +24,7 @@ module PaynetEasy::PaynetEasyApi::Query
     def test_process_response_processing
       [
         {
-          'type'              =>  @success_type,
+          'type'              =>  success_type,
           'status'            => 'processing',
           'merchant-order-id' =>  CLIENT_ID,
           'paynet-order-id'   =>  PAYNET_ID,
@@ -44,8 +36,10 @@ module PaynetEasy::PaynetEasyApi::Query
       end
     end
 
+    alias :payment_query_test_assert_process_response_processing assert_process_response_processing
+
     def assert_process_response_processing(response)
-      payment_transaction, response_object = super response
+      payment_transaction, response_object = payment_query_test_assert_process_response_processing response
 
       assert_true response_object.redirect_needed?
 
@@ -54,7 +48,6 @@ module PaynetEasy::PaynetEasyApi::Query
 
     protected
 
-    # @return   [Payment]
     def payment
       Payment.new(
       {
@@ -82,6 +75,22 @@ module PaynetEasy::PaynetEasyApi::Query
           'cell_phone'            => '660-485-6353'
         })
       })
+    end
+
+    def payment_status
+      Payment::STATUS_CAPTURE
+    end
+
+    def api_method
+      'sale-form'
+    end
+
+    def query
+      SaleFormQuery.new api_method
+    end
+
+    def success_type
+      'async-form-response'
     end
   end
 end

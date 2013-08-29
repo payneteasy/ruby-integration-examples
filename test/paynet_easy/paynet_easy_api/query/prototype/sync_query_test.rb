@@ -1,16 +1,18 @@
 require_relative './query_test'
 
 module PaynetEasy::PaynetEasyApi::Query::Prototype
-  class SyncQueryTest < QueryTest
+  module SyncQueryTest
+    include QueryTest
+    
     def test_process_response_approved
       raise NotImplementedError
     end
 
     def assert_process_response_approved(response)
       payment_transaction = payment_transaction()
-      response_object = Response.new response
+      response_object     = Response.new response
 
-      @object.process_response payment_transaction, response
+      query.process_response payment_transaction, response_object
 
       assert_true payment_transaction.approved?
       assert_true payment_transaction.finished?
@@ -22,7 +24,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     def test_process_response_declined
       [
         {
-          'type'              =>  @success_type,
+          'type'              =>  success_type,
           'status'            => 'filtered',
           'paynet-order-id'   =>  PAYNET_ID,
           'merchant-order-id' =>  CLIENT_ID,
@@ -31,7 +33,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
           'error-code'        =>  8876
         },
         {
-          'type'              =>  @success_type,
+          'type'              =>  success_type,
           'status'            => 'declined',
           'paynet-order-id'   =>  PAYNET_ID,
           'merchant-order-id' =>  CLIENT_ID,
@@ -46,9 +48,9 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
 
     def assert_process_response_declined(response)
       payment_transaction = payment_transaction()
-      response_object = Response.new response
+      response_object     = Response.new response
 
-      @object.process_response payment_transaction, response
+      query.process_response payment_transaction, response_object
 
       assert_true payment_transaction.declined?
       assert_true payment_transaction.finished?
@@ -60,7 +62,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     def test_process_response_error
       [
         {
-          'type'              =>  @success_type,
+          'type'              =>  success_type,
           'status'            => 'error',
           'paynet-order-id'   =>  PAYNET_ID,
           'merchant-order-id' =>  CLIENT_ID,

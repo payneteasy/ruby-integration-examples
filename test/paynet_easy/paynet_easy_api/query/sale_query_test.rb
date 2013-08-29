@@ -5,16 +5,8 @@ require 'payment_data/billing_address'
 require 'payment_data/credit_card'
 
 module PaynetEasy::PaynetEasyApi::Query
-  class SaleQueryTest < Prototype::PaymentQueryTest
-    def initialize(test_name)
-      super test_name
-      @payment_status = Payment::STATUS_CAPTURE
-      @api_method     = 'sale'
-    end
-
-    def setup
-      @object = SaleQuery.new @api_method
-    end
+  class SaleQueryTest < Test::Unit::TestCase
+    include Prototype::PaymentQueryTest
 
     def test_create_request
       [
@@ -32,7 +24,6 @@ module PaynetEasy::PaynetEasyApi::Query
 
     protected
 
-    # @return   [Payment]
     def payment
       Payment.new(
       {
@@ -70,6 +61,18 @@ module PaynetEasy::PaynetEasyApi::Query
           'cvv2'                  => '084'
         })
       })
+    end
+
+    def payment_status
+      Payment::STATUS_CAPTURE
+    end
+
+    def api_method
+      'sale'
+    end
+
+    def query
+      SaleQuery.new api_method
     end
   end
 end

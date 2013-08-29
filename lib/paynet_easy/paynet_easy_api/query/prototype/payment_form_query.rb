@@ -7,7 +7,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     include PaynetEasy::PaynetEasyApi::Util
     include PaynetEasy::PaynetEasyApi::Transport
 
-    @@response_fields_definition =
+    @request_fields_definition =
     [
       # mandatory
       ['client_orderid',         'payment.client_id',                    true,   Validator::ID],
@@ -33,7 +33,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       ['server_callback_url',    'query_config.callback_url',            false,  Validator::URL]
     ]
 
-    @@signature_definition =
+    @signature_definition =
     [
       'query_config.end_point',
       'payment.client_id',
@@ -42,7 +42,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       'query_config.signing_key'
     ]
 
-    @@response_fields_definition =
+    @response_fields_definition =
     [
       'type',
       'status',
@@ -52,7 +52,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       'redirect-url'
     ]
 
-    @@success_response_type = 'async-form-response'
+    @success_response_type = 'async-form-response'
 
     protected
 

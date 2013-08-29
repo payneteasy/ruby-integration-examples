@@ -6,8 +6,6 @@ module PaynetEasy::PaynetEasyApi::Query
   class QueryFactory
     include Contracts
 
-    @@query_interface = QueryInterface
-
     Contract String => IsA[QueryInterface]
     # Create API query object by API query method
     #

@@ -2,15 +2,8 @@ require_relative './prototype/sync_query_test'
 require 'query/status_query'
 
 module PaynetEasy::PaynetEasyApi::Query
-  class StatusQueryTest < Prototype::SyncQueryTest
-    def initialize(test_name)
-      super test_name
-      @success_type = 'status-response'
-    end
-
-    def setup
-      @object = StatusQuery.new '_'
-    end
+  class StatusQueryTest < Test::Unit::TestCase
+    include Prototype::SyncQueryTest
 
     def test_create_request
       [
@@ -28,7 +21,7 @@ module PaynetEasy::PaynetEasyApi::Query
     def test_process_response_approved
       [
         {
-          'type'              =>  @success_type,
+          'type'              =>  success_type,
           'status'            => 'approved',
           'paynet-order-id'   =>  PAYNET_ID,
           'merchant-order-id' =>  CLIENT_ID,
@@ -42,7 +35,7 @@ module PaynetEasy::PaynetEasyApi::Query
     def test_process_response_processing
       [
         {
-          'type'              =>  @success_type,
+          'type'              =>  success_type,
           'status'            => 'processing',
           'html'              => '<html></html>',
           'paynet-order-id'   =>  PAYNET_ID,
@@ -58,7 +51,7 @@ module PaynetEasy::PaynetEasyApi::Query
       payment_transaction = payment_transaction()
       response_object = Response.new response
 
-      @object.process_response payment_transaction, response
+      query.process_response payment_transaction, response_object
 
       assert_true payment_transaction.processing?
       assert_false payment_transaction.finished?
@@ -69,13 +62,20 @@ module PaynetEasy::PaynetEasyApi::Query
 
     protected
 
-    # @return   [Payment]
     def payment
       Payment.new(
       {
         'client_id'             => CLIENT_ID,
         'paynet_id'             => PAYNET_ID
       })
+    end
+
+    def success_type
+      'status-response'
+    end
+
+    def query
+      StatusQuery.new '_'
     end
   end
 end

@@ -95,7 +95,7 @@ module PaynetEasy::PaynetEasyApi::Util
         when MONTH  then (1..12).include? value.to_i
         else
           regexp = @@rule_regexps.key?(rule) ? @@rule_regexps[rule] : rule
-          regexp === value
+          regexp === value.to_s
         end
       rescue Exception
         valid = false

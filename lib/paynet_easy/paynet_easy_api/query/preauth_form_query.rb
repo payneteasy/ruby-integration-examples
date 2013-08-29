@@ -5,6 +5,6 @@ module PaynetEasy::PaynetEasyApi::Query
   class PreauthFormQuery < Prototype::PaymentFormQuery
     include PaynetEasy::PaynetEasyApi::PaymentData
 
-    @@payment_status = Payment::STATUS_PREAUTH
+    @payment_status = Payment::STATUS_PREAUTH
   end
 end

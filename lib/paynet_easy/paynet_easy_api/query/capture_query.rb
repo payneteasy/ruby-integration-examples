@@ -7,7 +7,7 @@ module PaynetEasy::PaynetEasyApi::Query
     include PaynetEasy::PaynetEasyApi::PaymentData
     include PaynetEasy::PaynetEasyApi::Util
 
-    @@request_fields_definition =
+    @request_fields_definition =
     [
       # mandatory
       ['client_orderid',     'payment.client_id',             true,   Validator::ID],
@@ -15,7 +15,7 @@ module PaynetEasy::PaynetEasyApi::Query
       ['login',              'query_config.login',            true,   Validator::MEDIUM_STRING]
     ]
 
-    @@signature_definition =
+    @signature_definition =
     [
       'query_config.login',
       'payment.client_id',
@@ -25,6 +25,6 @@ module PaynetEasy::PaynetEasyApi::Query
       'query_config.signing_key'
     ]
 
-    @@payment_status = Payment::STATUS_CAPTURE
+    @payment_status = Payment::STATUS_CAPTURE
   end
 end

@@ -25,10 +25,13 @@ module PaynetEasy::PaynetEasyApi::Util
         ['(086)543 543 54',        Validator::PHONE,       true],
         ['(086)s543b543',          Validator::PHONE,       false],
         ['0.98',                   Validator::AMOUNT,      true],
+        [0.98,                     Validator::AMOUNT,      true],
         ['98 000',                 Validator::AMOUNT,      false],
         ['USD',                    Validator::CURRENCY,    true],
         ['$',                      Validator::CURRENCY,    false],
-        ['23e2d3rf3f4',            Validator::ID,          true]
+        ['23e2d3rf3f4',            Validator::ID,          true],
+        ['123456789012345678901234567890', Validator::ID,  false],
+        [123,                      Validator::CVV2,        true]
       ]
       .each do |value, rule, expected_result|
         actual_result = Validator.validate_by_rule value, rule, false

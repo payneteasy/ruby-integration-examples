@@ -2,15 +2,8 @@ require_relative './prototype/sync_query_test'
 require 'query/create_card_ref_query'
 
 module PaynetEasy::PaynetEasyApi::Query
-  class CreateCardRefQueryTest < Prototype::SyncQueryTest
-    def initialize(test_name)
-      super test_name
-      @success_type = 'create-card-ref-response'
-    end
-
-    def setup
-      @object = CreateCardRefQuery.new '_'
-    end
+  class CreateCardRefQueryTest < Test::Unit::TestCase
+    include Prototype::SyncQueryTest
 
     def test_create_request
       [
@@ -40,15 +33,15 @@ module PaynetEasy::PaynetEasyApi::Query
       })
 
       assert_raise ValidationError, 'Some required fields missed or empty in Payment' do
-        @object.create_request payment_transaction
+        query.create_request payment_transaction
       end
     end
 
-    alias :parent_payment_transaction :payment_transaction
+    alias :sync_query_test_payment_transaction :payment_transaction
 
     def test_create_request_with_not_ended_payment
       assert_raise ValidationError, 'Only finished payment transaction can be used for create-card-ref-id' do
-        @object.create_request parent_payment_transaction
+        query.create_request sync_query_test_payment_transaction
       end
     end
 
@@ -63,27 +56,29 @@ module PaynetEasy::PaynetEasyApi::Query
       payment_transaction.payment = payment
 
       assert_raise ValidationError, 'Can not use new payment for create-card-ref-id' do
-        @object.create_request payment_transaction
+        query.create_request payment_transaction
       end
     end
 
     def test_process_success_response_with_empty_fields
       response = Response.new(
       {
-        'type'              =>  @success_type,
+        'type'              =>  success_type,
         'status'            => 'processing',
         'paynet-order-id'   =>  PAYNET_ID,
         'merchant-order-id' =>  CLIENT_ID,
         'serial-number'     => '_'
       })
 
-      @object.process_response payment_transaction, response
+      assert_raise ValidationError, 'Some required fields missed or empty in Response: card-ref-id' do
+        query.process_response payment_transaction, response
+      end
     end
 
     def test_process_response_approved
       [
         {
-          'type'              =>  @success_type,
+          'type'              =>  success_type,
           'status'            => 'approved',
           'card-ref-id'       =>  RECURRENT_CARD_FROM_ID,
           'serial-number'     => '_'
@@ -95,14 +90,12 @@ module PaynetEasy::PaynetEasyApi::Query
 
     protected
 
-    # @return   [PaymentTransaction]
     def payment_transaction
-      payment_transaction = super
+      payment_transaction = sync_query_test_payment_transaction
       payment_transaction.status = PaymentTransaction::STATUS_APPROVED
       payment_transaction
     end
 
-    # @return   [Payment]
     def payment
       Payment.new(
       {
@@ -110,6 +103,14 @@ module PaynetEasy::PaynetEasyApi::Query
         'paynet_id'             => PAYNET_ID,
         'status'                => Payment::STATUS_PREAUTH
       })
+    end
+
+    def success_type
+      'create-card-ref-response'
+    end
+
+    def query
+      CreateCardRefQuery.new '_'
     end
   end
 end

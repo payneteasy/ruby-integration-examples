@@ -3,16 +3,8 @@ require 'query/capture_query'
 require 'payment_data/payment'
 
 module PaynetEasy::PaynetEasyApi::Query
-  class CaptureQueryTest < Prototype::PaymentQueryTest
-    def initialize(test_name)
-      super test_name
-      @payment_status = Payment::STATUS_CAPTURE
-      @api_method     = 'capture'
-    end
-
-    def setup
-      @object = CaptureQuery.new @api_method
-    end
+  class CaptureQueryTest < Test::Unit::TestCase
+    include Prototype::PaymentQueryTest
 
     def test_create_request
       [
@@ -39,6 +31,18 @@ module PaynetEasy::PaynetEasyApi::Query
         'amount'                =>  99.1,
         'currency'              => 'EUR'
       })
+    end
+
+    def query
+      CaptureQuery.new api_method
+    end
+
+    def payment_status
+      Payment::STATUS_CAPTURE
+    end
+
+    def api_method
+      'capture'
     end
   end
 end

@@ -1,27 +1,19 @@
 require_relative './query_test'
 
 module PaynetEasy::PaynetEasyApi::Query::Prototype
-  class PaymentQueryTest < QueryTest
-    def initialize(test_name)
-      super test_name
-      @success_type   = 'async-response'
-      @api_method     = ''      # For IDE autocomplete
-      @payment_status = ''      # For IDE autocomplete
-    end
+  module PaymentQueryTest
+    include QueryTest
 
-    def setup
-      raise NotImplementedError, 'You must implement @object creation in this method'
-      @object = Query.new ''  # For IDE autocomplete
-    end
+    alias :query_test_assert_create_request :assert_create_request
 
     def assert_create_request(control_code)
-      payment_transaction, request = super control_code
+      payment_transaction, request = query_test_assert_create_request control_code
       payment = payment_transaction.payment
 
       assert_true payment.has_processing_transaction?
-      assert_equal @payment_status, payment.status
+      assert_equal payment_status, payment.status
       assert_equal PaymentTransaction::PROCESSOR_QUERY, payment_transaction.processor_type
-      assert_equal @api_method, payment_transaction.processor_name
+      assert_equal api_method, payment_transaction.processor_name
 
       [payment_transaction, request]
     end
@@ -31,7 +23,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       payment_transaction.status = PaymentTransaction::STATUS_PROCESSING
 
       assert_raise ValidationError, 'Payment can not has processing payment transaction' do
-        @object.create_request payment_transaction
+        query.create_request payment_transaction
       end
     end
 
@@ -40,14 +32,14 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       payment_transaction.status = PaymentTransaction::STATUS_APPROVED
 
       assert_raise ValidationError, 'Payment transaction must be new' do
-        @object.create_request payment_transaction
+        query.create_request payment_transaction
       end
     end
 
     def test_process_response_processing
       [
         {
-          'type'              => @success_type,
+          'type'              =>  success_type,
           'paynet-order-id'   =>  PAYNET_ID,
           'merchant-order-id' =>  CLIENT_ID,
           'serial-number'     => '_'
@@ -61,7 +53,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       payment_transaction = payment_transaction()
       response_object = Response.new response
 
-      @object.process_response payment_transaction, response_object
+      query.process_response payment_transaction, response_object
 
       assert_equal PAYNET_ID, payment_transaction.payment.paynet_id
       assert_true payment_transaction.processing?
@@ -95,7 +87,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
 
       response = Response.new(
       {
-        'type'              => @success_type,
+        'type'              =>  success_type,
         'status'            => 'approved',
         'paynet-order-id'   =>  PAYNET_ID,
         'merchant-order-id' => '123',
@@ -103,9 +95,23 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
         'redirect-url'      => 'http://example.com'
       })
 
-      @object.process_response payment_transaction, response
+      query.process_response payment_transaction, response
 
       assert_true payment_transaction.approved?
+    end
+
+    protected
+
+    def success_type
+      'async-response'
+    end
+
+    def api_method
+      raise NotImplementedError, 'You must return query api method from this method'
+    end
+
+    def payment_status
+      raise NotImplementedError, 'You must return query payment status from this method'
     end
   end
 end

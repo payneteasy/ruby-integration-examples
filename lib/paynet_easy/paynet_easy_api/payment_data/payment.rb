@@ -100,9 +100,9 @@ module PaynetEasy::PaynetEasyApi::PaymentData
     # @var  [Array]
     attr_accessor :payment_transactions
 
-    Contract None => Integer
+    Contract None => Maybe[Num]
     def amount_in_cents
-      (amount * 100).to_i
+      (amount * 100).to_i if amount
     end
 
     Contract Customer => Any
@@ -179,7 +179,7 @@ module PaynetEasy::PaynetEasyApi::PaymentData
     Contract None => Bool
     # True, if the payment has a transaction that is currently being processed
     def has_processing_transaction?
-      payment_transactions.detect &:processing?
+      payment_transactions.one? &:processing?
     end
 
     Contract String => Any

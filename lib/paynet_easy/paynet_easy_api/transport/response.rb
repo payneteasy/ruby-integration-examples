@@ -2,8 +2,9 @@ require 'contracts'
 require 'error/paynet_error'
 
 module PaynetEasy::PaynetEasyApi::Transport
-  class Response < Hash
+  class Response
     include Contracts
+    include PaynetEasy::PaynetEasyApi::Error
 
     # Need to update payment status
     NEEDED_STATUS_UPDATE  = 'status_update'
@@ -24,7 +25,7 @@ module PaynetEasy::PaynetEasyApi::Transport
     attr_accessor :needed_action
 
     def initialize(response = {})
-      super Hash[response.map {|key, value| [key, value.strip]}]
+      @data = Hash[response.map {|key, value| [key, value.to_s.strip]}]
     end
 
     Contract String => Any
@@ -143,11 +144,16 @@ module PaynetEasy::PaynetEasyApi::Transport
       end
     end
 
+    def method_missing(name, *args, &block)
+      @data.send name, *args, &block
+    end
+
     protected
 
     Contract Array => Any
     def any_key(keys)
       keys.each {|key| return fetch key if key? key}
+      nil # if all keys missed in data
     end
   end
 end

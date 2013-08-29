@@ -10,7 +10,7 @@ require 'error/validation_error'
 require 'error/paynet_error'
 
 module PaynetEasy::PaynetEasyApi::Query::Prototype
-  class QueryTest < Test::Unit::TestCase
+  module QueryTest
     include PaynetEasy::PaynetEasyApi::PaymentData
     include PaynetEasy::PaynetEasyApi::Transport
     include PaynetEasy::PaynetEasyApi::Error
@@ -24,16 +24,6 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     RECURRENT_CARD_FROM_ID    = '5588943'
     RECURRENT_CARD_TO_ID      = '5588978'
 
-    def initialize(test_name)
-      super test_name
-      @success_type = ''      # For IDE autocomplete
-    end
-
-    def setup
-      raise NotImplementedError, 'You must implement @object creation in this method'
-      @object = Query.new ''  # For IDE autocomplete
-    end
-
     def test_create_request
       raise NotImplementedError
     end
@@ -41,7 +31,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     def assert_create_request(control_code)
       payment_transaction = payment_transaction()
 
-      request         = @object.create_request payment_transaction
+      request         = query.create_request payment_transaction
       request_fields  = request.request_fields
 
       assert_not_nil request.api_method
@@ -60,14 +50,13 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
         {
           'status'        => Payment::STATUS_CAPTURE
         }),
-        'query_config'  => QueryConfig.new(
-        {
-          'signing_key'   => SIGNING_KEY
-        })
+        'query_config'  => query_config
       })
 
+      query = query()
+
       assert_raise ValidationError, 'Some required fields missed or empty in Payment' do
-        @object.create_request payment_transaction
+        query.create_request payment_transaction
       end
     end
 
@@ -77,7 +66,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       payment_transaction.query_config.login  = '123456789012345678901234567890123456789012345678901234567890'
 
       assert_raise ValidationError, 'Some fields invalid in Payment' do
-        @object.create_request payment_transaction
+        query.create_request payment_transaction
       end
     end
 
@@ -90,7 +79,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       response_object     = Response.new response
 
       begin
-        @object.process_response payment_transaction, response_object
+        query.process_response payment_transaction, response_object
       rescue PaynetError => error
         assert_true payment_transaction.error?
         assert_true payment_transaction.finished?
@@ -107,22 +96,22 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       response = Response.new 'type' => 'invalid'
 
       assert_raise ValidationError, "Response type 'invalid' does not match success response type" do
-        @object.process_response payment_transaction, response
+        query.process_response payment_transaction, response
       end
     end
 
     def test_process_success_response_with_empty_fields
-      response = Response.new 'type' => @success_type
+      response = Response.new 'type' => success_type
 
       assert_raise ValidationError, 'Some required fields missed or empty in Response' do
-        @object.process_response payment_transaction, response
+        query.process_response payment_transaction, response
       end
     end
 
     def test_process_response_with_invalid_id
       response = Response.new(
       {
-        'type'              => @success_type,
+        'type'              => success_type,
         'paynet-order-id'   => '_',
         'merchant-order-id' => '_',
         'serial-number'     => '_',
@@ -132,7 +121,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       })
 
       assert_raise ValidationError, "Response client_id '_' does not match Payment client_id" do
-        @object.process_response payment_transaction, response
+        query.process_response payment_transaction, response
       end
     end
 
@@ -140,7 +129,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       response = Response.new 'status' => 'error'
 
       assert_raise ValidationError, 'Unknown response type' do
-        @object.process_response payment_transaction, response
+        query.process_response payment_transaction, response
       end
     end
 
@@ -148,11 +137,21 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       response = Response.new 'type' => 'error', 'client_orderid' => 'invalid'
 
       assert_raise ValidationError, "Response client_id 'invalid' does not match Payment client_id" do
-        @object.process_response payment_transaction, response
+        query.process_response payment_transaction, response
       end
     end
 
     protected
+
+    # @return   [String]
+    def success_type
+      raise NotImplementedError, 'You must return success type for query response form this method'
+    end
+
+    # @return   [Query]
+    def query
+      raise NotImplementedError, 'You must implement query creation in this method'
+    end
 
     # @return   [PaymentTransaction]
     def payment_transaction
@@ -173,15 +172,17 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     def query_config
       QueryConfig.new(
       {
-        'login'             =>  LOGIN,
-        'end_point'         =>  END_POINT,
-        'signing_key'       =>  SIGNING_KEY,
-        'site_url'          => 'http://example.com',
-        'redirect_url'      => 'https://example.com/redirect_url',
-        'callback_url'      => 'https://example.com/callback_url'
+        'login'               =>  LOGIN,
+        'end_point'           =>  END_POINT,
+        'signing_key'         =>  SIGNING_KEY,
+        'site_url'            => 'http://example.com',
+        'gateway_url_sandbox' => 'https://example.com/sandbox_url',
+        'redirect_url'        => 'https://example.com/redirect_url',
+        'callback_url'        => 'https://example.com/callback_url'
       })
     end
 
+    # Create sha1 hash sum from all method arguments
     def create_control_code(*args)
       Digest::SHA1.hexdigest(args.join(''))
     end

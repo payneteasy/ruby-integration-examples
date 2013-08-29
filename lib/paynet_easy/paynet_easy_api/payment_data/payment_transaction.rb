@@ -115,6 +115,13 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       unless @@allowed_statuses.include? status
         raise ArgumentError, "Unknown transaction status given: '#{status}'"
       end
+
+      @status = status
+    end
+
+    Contract None => String
+    def status
+      @status ||= STATUS_NEW
     end
 
     Contract None => Bool

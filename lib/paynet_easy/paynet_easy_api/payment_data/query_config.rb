@@ -69,6 +69,11 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       @gateway_mode = gateway_mode
     end
 
+    Contract Any => String
+    def gateway_mode
+      @gateway_mode ||= GATEWAY_MODE_SANDBOX
+    end
+
     Contract None => String
     # Get gateway url for current gateway mode
     #

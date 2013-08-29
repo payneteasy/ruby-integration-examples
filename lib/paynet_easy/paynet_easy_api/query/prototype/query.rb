@@ -25,24 +25,23 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     #     ...
     #   [<last field name>:string,   <last property path>:string,    <is field required>:boolean, <validation rule>:string]
     # ]
-    @@request_fields_definition = []
+    @request_fields_definition = []
 
     # Request control code definition in format
     # [<first part property path>:string, <second part property path>:string ... <last part property path>:string]
-    @@signature_definition = []
+    @signature_definition = []
 
     # Response fields definition in format:
     # [<first field_name>:string, <second field_name>:string ... <last field_name>:string]
-    @@response_fields_definition = []
+    @response_fields_definition = []
 
     # Success response type
-    @@success_response_type = ''
+    @success_response_type = ''
 
     def initialize(api_method)
       @api_method = api_method
     end
 
-    Contract PaymentTransaction => Request
     # Create API gateway request from payment transaction data
     #
     # @param    payment_transaction   [PaymentTransaction]    Payment transaction for query
@@ -66,7 +65,6 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       raise error
     end
 
-    Contract PaymentTransaction, Response => Response
     # Process API gateway response and update payment transaction
     #
     # @param    payment_transaction   [PaymentTransaction]    Payment transaction for update
@@ -76,10 +74,10 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     def process_response(payment_transaction, response)
       if response.processing? || response.approved?
         validate = :validate_response_on_success
-        update   = :update_response_on_success
+        update   = :update_payment_transaction_on_success
       else
         validate = :validate_response_on_error
-        update   = :update_response_on_error
+        update   = :update_payment_transaction_on_error
       end
 
       begin
@@ -102,7 +100,6 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
 
     protected
 
-    Contract PaymentTransaction => Any
     # Validates payment transaction before request constructing
     #
     # @param    payment_transaction   [PaymentTransaction]    Payment transaction for validation
@@ -113,7 +110,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       missed_fields   = []
       invalid_fields  = []
 
-      @@request_fields_definition.each do |field_name, property_path, is_field_required, validation_rule|
+      request_fields_definition.each do |field_name, property_path, is_field_required, validation_rule|
         field_value = PropertyAccessor.get_value payment_transaction, property_path, false
 
         if field_value
@@ -140,7 +137,6 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       end
     end
 
-    Contract PaymentTransaction => Request
     # Creates request from payment transaction
     #
     # @param    payment_transaction   [PaymentTransaction]    Payment transaction for request constructing
@@ -149,7 +145,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     def payment_transaction_to_request(payment_transaction)
       request_fields = {}
 
-      @@request_fields_definition.each do |field_name, property_path, _|
+      request_fields_definition.each do |field_name, property_path, _|
         field_value = PropertyAccessor.get_value payment_transaction, property_path
 
         if field_value
@@ -160,7 +156,6 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       Request.new request_fields
     end
 
-    Contract PaymentTransaction => String
     # Generates the control code is used to ensure that it is a particular
     # Merchant (and not a fraudster) that initiates the transaction.
     #
@@ -170,28 +165,27 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     def create_signature(payment_transaction)
       control_code = ''
 
-      @@signature_definition.each do |property_path|
-        control_code << PropertyAccessor.get_value(payment_transaction, property_path)
+      signature_definition.each do |property_path|
+        control_code << PropertyAccessor.get_value(payment_transaction, property_path).to_s
       end
 
       Digest::SHA1.hexdigest control_code
     end
 
-    Contract PaymentTransaction, Response => Any
     # Validates response before payment transaction updating
     # if payment transaction is processing or approved
     #
     # @param    payment_transaction   [PaymentTransaction]    Payment transaction
     # @param    response              [Response]              Response for validating
     def validate_response_on_success(payment_transaction, response)
-      if response.type != @@success_response_type
+      if response.type != success_response_type
         raise ValidationError, "Response type '#{response.type}' does " +
-                               "not match success response type '#{@@success_response_type}'"
+                               "not match success response type '#{success_response_type}'"
       end
 
       missed_fields = []
 
-      @@response_fields_definition.each do |field_name|
+      response_fields_definition.each do |field_name|
         missed_fields << field_name unless response.key? field_name
       end
 
@@ -202,21 +196,19 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       validate_client_id payment_transaction, response
     end
 
-    Contract PaymentTransaction, Response => Any
     # Validates response before payment transaction updating
     # if payment transaction is not processing or approved
     #
     # @param    payment_transaction   [PaymentTransaction]    Payment transaction
     # @param    response              [Response]              Response for validating
     def validate_response_on_error(payment_transaction, response)
-      unless [@@success_response_type, 'error', 'validation-error'].include? response.type
+      unless [success_response_type, 'error', 'validation-error'].include? response.type
         raise ValidationError, "Unknown response type '#{response.type}'"
       end
 
       validate_client_id payment_transaction, response
     end
 
-    Contract PaymentTransaction, Response => Any
     # Updates payment transaction by query response data
     # if payment transaction is processing or approved
     #
@@ -227,7 +219,6 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       set_paynet_id payment_transaction, response
     end
 
-    Contract PaymentTransaction, Response => Any
     # Updates payment transaction by query response data
     # if payment transaction is not processing or approved
     #
@@ -244,7 +235,6 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       set_paynet_id payment_transaction, response
     end
 
-    Contract PaymentTransaction => Any
     # Validates payment transaction query config
     #
     # @param    payment_transaction   [PaymentTransaction]    Payment transaction
@@ -256,13 +246,12 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
 
     # Validates query object definition
     def validate_query_definition
-      raise RuntimeError, 'You must configure @@request_fields_definition'  if @@request_fields_definition.empty?
-      raise RuntimeError, 'You must configure @@signature_definition'       if @@signature_definition.empty?
-      raise RuntimeError, 'You must configure @@response_fields_definition' if @@response_fields_definition.empty?
-      raise RuntimeError, 'You must configure @@success_response_type'      if @@success_response_type.nil?
+      raise RuntimeError, 'You must configure @request_fields_definition'  if request_fields_definition.empty?
+      raise RuntimeError, 'You must configure @signature_definition'       if signature_definition.empty?
+      raise RuntimeError, 'You must configure @response_fields_definition' if response_fields_definition.empty?
+      raise RuntimeError, 'You must configure @success_response_type'      if success_response_type.nil?
     end
 
-    Contract PaymentTransaction, Response => Any
     # Check, is payment transaction client order id and query response client order id equal or not.
     #
     # @param    payment_transaction   [PaymentTransaction]    Payment transaction for update
@@ -276,7 +265,6 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       end
     end
 
-    Contract PaymentTransaction, Response => Any
     # Set PaynetEasy payment id to payment transaction Payment
     #
     # @param    payment_transaction   [PaymentTransaction]    Payment transaction for update
@@ -285,6 +273,37 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
       if response.payment_paynet_id
         payment_transaction.payment.paynet_id = response.payment_paynet_id
       end
+    end
+
+    class << self
+      # Make instance variables available in child classes
+      def inherited(subclass)
+        instance_variables.each do |variable_name|
+          subclass.instance_variable_set variable_name, instance_variable_get(variable_name)
+        end
+      end
+    end
+
+    protected
+
+    # @return   [Array]
+    def request_fields_definition
+      self.class.instance_variable_get :@request_fields_definition
+    end
+
+    # @return   [Array]
+    def signature_definition
+      self.class.instance_variable_get :@signature_definition
+    end
+
+    # @return   [Array]
+    def response_fields_definition
+      self.class.instance_variable_get :@response_fields_definition
+    end
+
+    # @return   [String]
+    def success_response_type
+      self.class.instance_variable_get :@success_response_type
     end
   end
 end

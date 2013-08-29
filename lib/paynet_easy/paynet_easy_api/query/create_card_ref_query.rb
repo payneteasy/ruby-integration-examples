@@ -10,7 +10,7 @@ module PaynetEasy::PaynetEasyApi::Query
     include PaynetEasy::PaynetEasyApi::Util
     include PaynetEasy::PaynetEasyApi::Error
 
-    @@request_fields_definition =
+    @request_fields_definition =
     [
       # mandatory
       ['client_orderid',     'payment.client_id',             true,   Validator::ID],
@@ -18,7 +18,7 @@ module PaynetEasy::PaynetEasyApi::Query
       ['login',              'query_config.login',            true,   Validator::MEDIUM_STRING]
     ]
 
-    @@signature_definition =
+    @signature_definition =
     [
       'query_config.login',
       'payment.client_id',
@@ -26,7 +26,7 @@ module PaynetEasy::PaynetEasyApi::Query
       'query_config.signing_key'
     ]
 
-    @@response_fields_definition =
+    @response_fields_definition =
     [
       'type',
       'status',
@@ -34,7 +34,7 @@ module PaynetEasy::PaynetEasyApi::Query
       'serial-number'
     ]
 
-    @@success_response_type = 'create-card-ref-response'
+    @success_response_type = 'create-card-ref-response'
 
     protected
 

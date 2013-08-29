@@ -32,7 +32,7 @@ module PaynetEasy::PaynetEasyApi::PaymentData
 
     Contract String => Any
     def credit_card_number=(credit_card_number)
-      @credit_card_number = credit_card_number.delete(' -_.,')
+      @credit_card_number = credit_card_number.gsub(/\s|-|_|\.|,/, '')
     end
   end
 end

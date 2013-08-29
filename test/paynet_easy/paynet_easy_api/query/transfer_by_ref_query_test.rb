@@ -3,16 +3,8 @@ require 'query/transfer_by_ref_query'
 require 'payment_data/recurrent_card'
 
 module PaynetEasy::PaynetEasyApi::Query
-  class TransferByRefQueryTest < Prototype::PaymentQueryTest
-    def initialize(test_name)
-      super test_name
-      @payment_status = Payment::STATUS_CAPTURE
-      @api_method     = 'transfer-by-ref'
-    end
-
-    def setup
-      @object = CaptureQuery.new @api_method
-    end
+  class TransferByRefQueryTest < Test::Unit::TestCase
+    include Prototype::PaymentQueryTest
 
     def test_create_request
       [
@@ -32,7 +24,6 @@ module PaynetEasy::PaynetEasyApi::Query
 
     protected
 
-    # @return   [Payment]
     def payment
       Payment.new(
       {
@@ -55,6 +46,18 @@ module PaynetEasy::PaynetEasyApi::Query
           'paynet_id'             => RECURRENT_CARD_TO_ID,
         })
       })
+    end
+
+    def payment_status
+      Payment::STATUS_CAPTURE
+    end
+
+    def api_method
+      'transfer-by-ref'
+    end
+
+    def query
+      TransferByRefQuery.new api_method
     end
   end
 end
