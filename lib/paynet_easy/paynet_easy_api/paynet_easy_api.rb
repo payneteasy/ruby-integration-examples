@@ -2,6 +2,8 @@ module PaynetEasy
   module PaynetEasyApi
     module PaymentData
     end
+    module Callback
+    end
     module Query
       module Prototype
       end
@@ -12,3 +14,5 @@ module PaynetEasy
     end
   end
 end
+
+require 'payment_processor'

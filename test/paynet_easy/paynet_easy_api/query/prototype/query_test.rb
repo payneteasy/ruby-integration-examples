@@ -84,7 +84,7 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
         assert_true payment_transaction.error?
         assert_true payment_transaction.finished?
         assert_true payment_transaction.has_errors?
-        assert_equal response['error-message'], error.message
+        assert_equal response_object.error_message, error.message
 
         return [payment_transaction, response_object]
       else

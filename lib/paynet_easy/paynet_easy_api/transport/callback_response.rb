@@ -1,10 +1,17 @@
-require 'response'
+require 'transport/response'
 
 module PaynetEasy::PaynetEasyApi::Transport
   class CallbackResponse < Response
-    attr_reader :amount
-    attr_reader :comment
-    attr_reader :merchant_data
-    attr_reader :type
+    def amount
+      fetch 'amount', nil
+    end
+
+    def comment
+      fetch 'comment', nil
+    end
+
+    def merchant_data
+      fetch 'merchant_data', nil
+    end
   end
 end

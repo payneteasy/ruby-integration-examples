@@ -1,6 +1,5 @@
 require 'contracts'
 require 'digest/sha1'
-require 'query/query_interface'
 require 'payment_data/payment_transaction'
 require 'util/property_accessor'
 require 'util/validator'
@@ -15,8 +14,6 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
     include PaynetEasy::PaynetEasyApi::Transport
     include PaynetEasy::PaynetEasyApi::Util
     include PaynetEasy::PaynetEasyApi::Error
-
-    include PaynetEasy::PaynetEasyApi::Query::QueryInterface
 
     # Request fields definition in format
     # [
@@ -283,8 +280,6 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
         end
       end
     end
-
-    protected
 
     # @return   [Array]
     def request_fields_definition
