@@ -11,4 +11,5 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.9.3'
   s.add_development_dependency 'test-unit'
+  s.add_development_dependency 'rake'
 end

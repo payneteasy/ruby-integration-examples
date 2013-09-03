@@ -10,7 +10,7 @@ require 'error/validation_error'
 require 'error/paynet_error'
 
 module PaynetEasy::PaynetEasyApi::Query::Prototype
-  module QueryTest
+  module QueryTestPrototype
     include PaynetEasy::PaynetEasyApi::PaymentData
     include PaynetEasy::PaynetEasyApi::Transport
     include PaynetEasy::PaynetEasyApi::Error

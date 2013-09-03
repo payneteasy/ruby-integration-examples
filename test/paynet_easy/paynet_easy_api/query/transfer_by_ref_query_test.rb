@@ -1,10 +1,10 @@
-require_relative './prototype/payment_query_test'
+require_relative './prototype/payment_query_test_prototype'
 require 'query/transfer_by_ref_query'
 require 'payment_data/recurrent_card'
 
 module PaynetEasy::PaynetEasyApi::Query
   class TransferByRefQueryTest < Test::Unit::TestCase
-    include Prototype::PaymentQueryTest
+    include Prototype::PaymentQueryTestPrototype
 
     def test_create_request
       [

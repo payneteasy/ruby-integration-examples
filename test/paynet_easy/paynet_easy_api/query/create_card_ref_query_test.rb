@@ -1,9 +1,9 @@
-require_relative './prototype/sync_query_test'
+require_relative './prototype/sync_query_test_prototype'
 require 'query/create_card_ref_query'
 
 module PaynetEasy::PaynetEasyApi::Query
   class CreateCardRefQueryTest < Test::Unit::TestCase
-    include Prototype::SyncQueryTest
+    include Prototype::SyncQueryTestPrototype
 
     def test_create_request
       [

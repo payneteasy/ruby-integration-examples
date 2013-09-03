@@ -1,9 +1,9 @@
-require_relative './prototype/payment_query_test'
+require_relative './prototype/payment_query_test_prototype'
 require 'query/return_query'
 
 module PaynetEasy::PaynetEasyApi::Query
   class ReturnQueryTest < Test::Unit::TestCase
-    include Prototype::PaymentQueryTest
+    include Prototype::PaymentQueryTestPrototype
 
     def test_create_request
       [

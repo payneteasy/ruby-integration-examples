@@ -1,4 +1,4 @@
-require_relative './prototype/payment_query_test'
+require_relative './prototype/payment_query_test_prototype'
 require 'query/sale_query'
 require 'payment_data/customer'
 require 'payment_data/billing_address'
@@ -6,7 +6,7 @@ require 'payment_data/credit_card'
 
 module PaynetEasy::PaynetEasyApi::Query
   class SaleQueryTest < Test::Unit::TestCase
-    include Prototype::PaymentQueryTest
+    include Prototype::PaymentQueryTestPrototype
 
     def test_create_request
       [

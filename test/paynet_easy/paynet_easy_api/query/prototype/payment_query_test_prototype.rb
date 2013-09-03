@@ -1,8 +1,8 @@
-require_relative './query_test'
+require_relative './query_test_prototype'
 
 module PaynetEasy::PaynetEasyApi::Query::Prototype
-  module PaymentQueryTest
-    include QueryTest
+  module PaymentQueryTestPrototype
+    include QueryTestPrototype
 
     alias :query_test_assert_create_request :assert_create_request
 

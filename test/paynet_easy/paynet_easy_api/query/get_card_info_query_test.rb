@@ -1,10 +1,10 @@
-require_relative './prototype/sync_query_test'
+require_relative './prototype/sync_query_test_prototype'
 require 'query/get_card_info_query'
 require 'payment_data/recurrent_card'
 
 module PaynetEasy::PaynetEasyApi::Query
   class GetCardInfoQueryTest < Test::Unit::TestCase
-    include Prototype::SyncQueryTest
+    include Prototype::SyncQueryTestPrototype
 
     def test_create_request
       [

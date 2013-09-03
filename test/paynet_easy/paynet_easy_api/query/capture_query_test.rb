@@ -1,10 +1,10 @@
-require_relative './prototype/payment_query_test'
+require_relative './prototype/payment_query_test_prototype'
 require 'query/capture_query'
 require 'payment_data/payment'
 
 module PaynetEasy::PaynetEasyApi::Query
   class CaptureQueryTest < Test::Unit::TestCase
-    include Prototype::PaymentQueryTest
+    include Prototype::PaymentQueryTestPrototype
 
     def test_create_request
       [

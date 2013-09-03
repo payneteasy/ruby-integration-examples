@@ -1,8 +1,8 @@
-require_relative './query_test'
+require_relative './query_test_prototype'
 
 module PaynetEasy::PaynetEasyApi::Query::Prototype
-  module SyncQueryTest
-    include QueryTest
+  module SyncQueryTestPrototype
+    include QueryTestPrototype
     
     def test_process_response_approved
       raise NotImplementedError
