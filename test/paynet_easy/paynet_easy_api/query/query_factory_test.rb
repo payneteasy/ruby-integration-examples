@@ -10,11 +10,11 @@ module PaynetEasy::PaynetEasyApi::Query
       @object = QueryFactory.new
     end
 
-    def test_get_query
-      query = @object.get_query 'create-card-ref'
+    def test_query
+      query = @object.query 'create-card-ref'
       assert_instance_of CreateCardRefQuery, query
 
-      query = @object.get_query 'return'
+      query = @object.query 'return'
       assert_instance_of ReturnQuery, query
     end
   end

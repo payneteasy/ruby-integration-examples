@@ -74,7 +74,7 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       @gateway_mode ||= GATEWAY_MODE_SANDBOX
     end
 
-    Contract None => String
+    Contract None => Maybe[String]
     # Get gateway url for current gateway mode
     #
     # @return   [String]    Sandbox gateway url if gateway mode is sandbox,

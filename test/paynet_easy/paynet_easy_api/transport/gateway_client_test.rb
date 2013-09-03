@@ -16,7 +16,7 @@ module PaynetEasy::PaynetEasyApi::Transport
       request.end_point   = 253
       request.gateway_url = 'https://qa.clubber.me/paynet/api/v2/'
 
-      @object.make_request request
+      #@object.make_request request
     end
   end
 end

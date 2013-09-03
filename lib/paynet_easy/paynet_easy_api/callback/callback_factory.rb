@@ -19,7 +19,7 @@ module PaynetEasy::PaynetEasyApi::Callback
     # @param    callback_type   [String]              Callback type
     #
     # @return                   [CallbackPrototype]   Callback processor
-    def get_callback(callback_type)
+    def callback(callback_type)
       callback_class = "#{callback_type.camelize}Callback"
       callback_file  = "callback/#{callback_type}_callback"
 

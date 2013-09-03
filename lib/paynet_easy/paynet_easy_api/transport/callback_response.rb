@@ -13,5 +13,9 @@ module PaynetEasy::PaynetEasyApi::Transport
     def merchant_data
       fetch 'merchant_data', nil
     end
+
+    def type=(type)
+      store 'type', type
+    end
   end
 end

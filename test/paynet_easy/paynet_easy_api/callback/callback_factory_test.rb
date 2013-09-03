@@ -10,11 +10,11 @@ module PaynetEasy::PaynetEasyApi::Callback
       @object = CallbackFactory.new
     end
 
-    def test_get_callback
-      callback = @object.get_callback 'customer_return'
+    def test_callback
+      callback = @object.callback 'customer_return'
       assert_instance_of CustomerReturnCallback, callback
 
-      callback = @object.get_callback 'sale'
+      callback = @object.callback 'sale'
       assert_instance_of PaynetEasyCallback, callback
       assert_equal 'sale', callback.instance_variable_get(:@callback_type)
     end
