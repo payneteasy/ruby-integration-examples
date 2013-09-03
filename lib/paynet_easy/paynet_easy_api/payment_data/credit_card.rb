@@ -1,10 +1,5 @@
-require 'contracts'
-require 'payment_data/data'
-
 module PaynetEasy::PaynetEasyApi::PaymentData
   class CreditCard < Data
-    include Contracts
-
     # CreditCard CVV2
     #
     # @var [String]
@@ -30,7 +25,6 @@ module PaynetEasy::PaynetEasyApi::PaymentData
     # @var [String]
     attr_accessor :expire_month
 
-    Contract String => Any
     def credit_card_number=(credit_card_number)
       @credit_card_number = credit_card_number.gsub(/\s|-|_|\.|,/, '')
     end

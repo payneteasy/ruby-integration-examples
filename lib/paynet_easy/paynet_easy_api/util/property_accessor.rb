@@ -1,10 +1,5 @@
-require 'contracts'
-
 module PaynetEasy::PaynetEasyApi::Util
   module PropertyAccessor
-    include Contracts
-
-    Contract Any, String, Bool => Any
     # Get property value by property path.
     #
     # @param    object          [Object]                  Object with data
@@ -33,7 +28,6 @@ module PaynetEasy::PaynetEasyApi::Util
       end
     end
 
-    Contract Any, String, Any, Bool => Any
     # Set property value by property path.
     #
     # @param    object            [Object]                  Object with data

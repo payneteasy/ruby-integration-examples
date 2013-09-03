@@ -1,12 +1,8 @@
-require 'contracts'
 require 'util/string'
 require 'query/prototype/query'
 
 module PaynetEasy::PaynetEasyApi::Query
   class QueryFactory
-    include Contracts
-
-    Contract String => IsA[Prototype::Query]
     # Create API query object by API query method
     #
     # @param    api_query_name    [String]              API query method name

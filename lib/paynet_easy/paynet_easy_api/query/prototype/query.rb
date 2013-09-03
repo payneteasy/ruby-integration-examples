@@ -1,4 +1,3 @@
-require 'contracts'
 require 'digest/sha1'
 require 'payment_data/payment_transaction'
 require 'util/property_accessor'
@@ -9,7 +8,6 @@ require 'error/validation_error'
 
 module PaynetEasy::PaynetEasyApi::Query::Prototype
   class Query
-    include Contracts
     include PaynetEasy::PaynetEasyApi::PaymentData
     include PaynetEasy::PaynetEasyApi::Transport
     include PaynetEasy::PaynetEasyApi::Util

@@ -1,4 +1,3 @@
-require 'contracts'
 require 'payment_data/data'
 require 'payment_data/customer'
 require 'payment_data/billing_address'
@@ -8,8 +7,6 @@ require 'payment_data/payment_transaction'
 
 module PaynetEasy::PaynetEasyApi::PaymentData
   class Payment < Data
-    include Contracts
-
     # Payment is new, and not processing
     STATUS_NEW        = 'new'
 
@@ -100,67 +97,54 @@ module PaynetEasy::PaynetEasyApi::PaymentData
     # @var  [Array]
     attr_accessor :payment_transactions
 
-    Contract None => Maybe[Num]
     def amount_in_cents
       (amount * 100).to_i if amount
     end
 
-    Contract Customer => Any
     def customer=(customer)
       @customer = customer
     end
 
-    Contract None => Customer
     def customer
       @customer ||= Customer.new
     end
 
-    Contract BillingAddress => Any
     def billing_address=(billing_address)
       @billing_address = billing_address
     end
 
-    Contract None => BillingAddress
     def billing_address
       @billing_address ||= BillingAddress.new
     end
 
-    Contract CreditCard => Any
     def credit_card=(credit_card)
       @credit_card = credit_card
     end
 
-    Contract None => CreditCard
     def credit_card
       @credit_card ||= CreditCard.new
     end
 
-    Contract RecurrentCard => Any
     def recurrent_card_from=(recurrent_card)
       @recurrent_card_from = recurrent_card
     end
 
-    Contract None => RecurrentCard
     def recurrent_card_from
       @recurrent_card_from ||= RecurrentCard.new
     end
 
-    Contract RecurrentCard => Any
     def recurrent_card_to=(recurrent_card)
       @recurrent_card_to = recurrent_card
     end
 
-    Contract None => RecurrentCard
     def recurrent_card_to
       @recurrent_card_to ||= RecurrentCard.new
     end
 
-    Contract None => ArrayOf[PaymentTransaction]
     def payment_transactions
       @payment_transactions ||= []
     end
 
-    Contract PaymentTransaction => Any
     def add_payment_transaction(payment_transaction)
       unless has_payment_transaction? payment_transaction
         @payment_transactions << payment_transaction
@@ -171,18 +155,15 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       end
     end
 
-    Contract PaymentTransaction => Bool
     def has_payment_transaction?(payment_transaction)
       payment_transactions.include? payment_transaction
     end
 
-    Contract None => Bool
     # True, if the payment has a transaction that is currently being processed
     def has_processing_transaction?
       payment_transactions.one? &:processing?
     end
 
-    Contract String => Any
     def status=(status)
       unless @@allowed_statuses.include? status
         raise ArgumentError, "Unknown payment status given: '#{status}'"
@@ -191,19 +172,16 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       @status = status
     end
 
-    Contract None => Bool
     # True, if payment is new
     def new?
       status == STATUS_NEW
     end
 
-    Contract None => Bool
     # True, is payment is paid up
     def paid?
       [STATUS_PREAUTH, STATUS_CAPTURE].include? status
     end
 
-    Contract None => Bool
     # True, if funds returned to customer
     def returned?
       status == STATUS_RETURN

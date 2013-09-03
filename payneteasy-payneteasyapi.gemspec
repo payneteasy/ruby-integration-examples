@@ -10,6 +10,5 @@ Gem::Specification.new do |s|
   s.test_files            = Dir['test/**/*_test.rb']
 
   s.required_ruby_version = '>= 1.9.3'
-  s.add_dependency 'contracts'
   s.add_development_dependency 'test-unit'
 end

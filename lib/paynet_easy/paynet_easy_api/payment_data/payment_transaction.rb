@@ -1,4 +1,3 @@
-require 'contracts'
 require 'payment_data/data'
 
 # :KLUDGE:    Imenem    22.08.2013
@@ -14,8 +13,6 @@ require 'payment_data/query_config'
 
 module PaynetEasy::PaynetEasyApi::PaymentData
   class PaymentTransaction < Data
-    include Contracts
-
     # Payment transaction processed by payment query
     PROCESSOR_QUERY       = 'query'
 
@@ -88,7 +85,6 @@ module PaynetEasy::PaynetEasyApi::PaymentData
     # @var  [Array]
     attr_accessor :errors
 
-    Contract String => Any
     def processor_type=(processor_type)
       unless @@allowed_processor_types.include? processor_type
         raise ArgumentError, "Unknown transaction processor type given: '#{processor_type}'"
@@ -101,7 +97,6 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       @processor_type = processor_type
     end
 
-    Contract String => Any
     def processor_name=(processor_name)
       if @processor_name
         raise RuntimeError, 'You can set payment transaction processor name only once'
@@ -110,7 +105,6 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       @processor_name = processor_name
     end
 
-    Contract String => Any
     def status=(status)
       unless @@allowed_statuses.include? status
         raise ArgumentError, "Unknown transaction status given: '#{status}'"
@@ -119,48 +113,40 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       @status = status
     end
 
-    Contract None => String
     def status
       @status ||= STATUS_NEW
     end
 
-    Contract None => Bool
     # True, if payment transaction is new
     def new?
       status == STATUS_NEW
     end
 
-    Contract None => Bool
     # True, if payment transaction is now processing
     def processing?
       status == STATUS_PROCESSING
     end
 
-    Contract None => Bool
     # True, if payment transaction approved
     def approved?
       status == STATUS_APPROVED
     end
 
-    Contract None => Bool
     # True, if payment transaction declined or filtered
     def declined?
       [STATUS_DECLINED, STATUS_FILTERED].include? status
     end
 
-    Contract None => Bool
     # True, if error occurred when processing payment transaction by PaynetEasy gateway
     def error?
       status == STATUS_ERROR
     end
 
-    Contract None => Bool
     # True, if payment transaction processing is finished
     def finished?
       !new? && !processing?
     end
 
-    Contract Payment => Any
     def payment=(payment)
       @payment = payment
 
@@ -169,39 +155,32 @@ module PaynetEasy::PaynetEasyApi::PaymentData
       end
     end
 
-    Contract None => Payment
     def payment
       @payment ||= Payment.new
     end
 
-    Contract QueryConfig => Any
     def query_config=(query_config)
       @query_config = query_config
     end
 
-    Contract None => QueryConfig
     def query_config
       @query_config ||= QueryConfig.new
     end
 
-    Contract None => ArrayOf[IsA[Exception]]
     def errors
       @errors ||= []
     end
 
-    Contract IsA[Exception] => Any
     def add_error(error)
       unless errors.include? error
         errors << error
       end
     end
 
-    Contract None => Bool
     def has_errors?
       errors.any?
     end
 
-    Contract None => Maybe[IsA[Exception]]
     def last_error
       errors.last if has_errors?
     end

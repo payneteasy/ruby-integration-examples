@@ -1,11 +1,8 @@
-require 'contracts'
 require 'util/string'
 require 'callback/callback_prototype'
 
 module PaynetEasy::PaynetEasyApi::Callback
   class CallbackFactory
-    include Contracts
-
     @@allowed_payneteasy_callback_types =
     [
       'sale',
@@ -13,7 +10,6 @@ module PaynetEasy::PaynetEasyApi::Callback
       'chargeback'
     ]
 
-    Contract String => IsA[CallbackPrototype]
     # Get callback processor by callback type
     #
     # @param    callback_type   [String]              Callback type
@@ -36,7 +32,6 @@ module PaynetEasy::PaynetEasyApi::Callback
 
     protected
 
-    Contract  String, String, String => IsA[CallbackPrototype]
     # Load callback class file and return new callback object
     #
     # @param    callback_file     [String]              Callback class file

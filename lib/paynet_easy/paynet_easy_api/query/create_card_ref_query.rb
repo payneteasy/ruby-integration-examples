@@ -1,11 +1,9 @@
-require 'contracts'
 require 'query/prototype/query'
 require 'util/validator'
 require 'error/validation_error'
 
 module PaynetEasy::PaynetEasyApi::Query
   class CreateCardRefQuery < Prototype::Query
-    include Contracts
     include PaynetEasy::PaynetEasyApi::PaymentData
     include PaynetEasy::PaynetEasyApi::Util
     include PaynetEasy::PaynetEasyApi::Error
@@ -64,7 +62,6 @@ module PaynetEasy::PaynetEasyApi::Query
       payment_transaction.payment.recurrent_card_from.paynet_id = response.card_paynet_id
     end
 
-    Contract PaymentTransaction => Any
     # Check, if payment transaction is finished and payment is not new.
     #
     # @param    payment_transaction   [PaymentTransaction]    Payment transaction for validation

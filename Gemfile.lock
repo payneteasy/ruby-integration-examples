@@ -2,12 +2,10 @@ PATH
   remote: .
   specs:
     payneteasy-payneteasyapi (0.1.0)
-      contracts
 
 GEM
   remote: http://rubygems.org/
   specs:
-    contracts (0.2.2)
     test-unit (2.5.5)
 
 PLATFORMS

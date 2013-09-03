@@ -1,9 +1,7 @@
-require 'contracts'
 require 'util/property_accessor'
 
 module PaynetEasy::PaynetEasyApi::PaymentData
   class Data
-    include Contracts
     include PaynetEasy::PaynetEasyApi::Util
 
     def initialize(data_hash = {}, fail_on_unknown_field = true)

@@ -1,11 +1,9 @@
-require 'contracts'
 require 'uri'
 require 'ipaddr'
 require 'error/validation_error'
 
 module PaynetEasy::PaynetEasyApi::Util
   module Validator
-    include Contracts
     include PaynetEasy::PaynetEasyApi::Error
 
     # Validate value as email
@@ -78,7 +76,6 @@ module PaynetEasy::PaynetEasyApi::Util
         LONG_STRING           => /^[\S\s]{1,128}$/i
     }
 
-    Contract Any, Or[String, Regexp], Bool => Bool
     # Validates value by given rule.
     # Rule can be one of Validator constants or regExp.
     #

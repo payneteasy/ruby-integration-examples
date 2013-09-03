@@ -1,4 +1,3 @@
-require 'contracts'
 require 'net/http'
 require 'uri'
 require 'cgi'
@@ -12,12 +11,10 @@ require 'error/request_error'
 
 module PaynetEasy::PaynetEasyApi::Transport
   class GatewayClient
-    include Contracts
     include Net
     include PaynetEasy::PaynetEasyApi::Util
     include PaynetEasy::PaynetEasyApi::Error
 
-    Contract Request => Response
     # Make request to the PaynetEasy gateway
     #
     # @param    request   [Request]     Request data
@@ -31,7 +28,6 @@ module PaynetEasy::PaynetEasyApi::Transport
 
     protected
 
-    Contract Request => HTTPOK
     # Executes request
     #
     # @param    request   [Request]         Request to execute
@@ -57,7 +53,6 @@ module PaynetEasy::PaynetEasyApi::Transport
       response
     end
 
-    Contract HTTPOK => Response
     # Parse PaynetEasy response from string to Response object
     #
     # @param    response    [HTTPResponse]    PaynetEasy response as HTTPResponse
@@ -74,7 +69,6 @@ module PaynetEasy::PaynetEasyApi::Transport
       Response.new response_fields
     end
 
-    Contract Request => Any
     # Validates Request
     #
     # @param    request   [Request]           Request for validation

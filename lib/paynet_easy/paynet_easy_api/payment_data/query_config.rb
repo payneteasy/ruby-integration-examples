@@ -1,10 +1,7 @@
-require 'contracts'
 require 'payment_data/data'
 
 module PaynetEasy::PaynetEasyApi::PaymentData
   class QueryConfig < Data
-    include Contracts
-
     # Execute query to PaynetEasy sandbox gateway
     GATEWAY_MODE_SANDBOX      = 'sandbox'
 
@@ -63,18 +60,15 @@ module PaynetEasy::PaynetEasyApi::PaymentData
     # @var [String]
     attr_accessor :gateway_url_production
 
-    Contract String => Any
     def gateway_mode=(gateway_mode)
       check_gateway_mode gateway_mode
       @gateway_mode = gateway_mode
     end
 
-    Contract Any => String
     def gateway_mode
       @gateway_mode ||= GATEWAY_MODE_SANDBOX
     end
 
-    Contract None => Maybe[String]
     # Get gateway url for current gateway mode
     #
     # @return   [String]    Sandbox gateway url if gateway mode is sandbox,
@@ -89,7 +83,6 @@ module PaynetEasy::PaynetEasyApi::PaymentData
 
     protected
 
-    Contract String => Any
     # Checks, is gateway mode allowed or not
     #
     # @param    gateway_mode    [String]    Gateway mode to check

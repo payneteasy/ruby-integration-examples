@@ -1,4 +1,3 @@
-require 'contracts'
 require 'payment_data/payment_transaction'
 require 'query/query_factory'
 require 'query/prototype/query'
@@ -11,7 +10,6 @@ require 'transport/callback_response'
 
 module PaynetEasy::PaynetEasyApi
   class PaymentProcessor
-    include Contracts
     include PaynetEasy::PaynetEasyApi::PaymentData
     include PaynetEasy::PaynetEasyApi::Transport
     include PaynetEasy::PaynetEasyApi::Query
@@ -50,13 +48,11 @@ module PaynetEasy::PaynetEasyApi
     attr_accessor :query_factory
     attr_accessor :callback_factory
 
-    Contract Array => Any
     def initialize(handlers = {})
       @handlers = {}
       set_handlers handlers
     end
 
-    Contract String, PaymentTransaction => Maybe[Response]
     # Executes payment API query
     #
     # @param    query_name            [String]                Payment API query name
@@ -80,7 +76,6 @@ module PaynetEasy::PaynetEasyApi
       response
     end
 
-    Contract CallbackResponse, PaymentTransaction => Maybe[CallbackResponse]
     # Executes payment gateway processor for customer return from payment form or 3D-auth
     #
     # @param    callback_response     [CallbackResponse]      Callback object with data from payment gateway
@@ -92,7 +87,6 @@ module PaynetEasy::PaynetEasyApi
       process_paynet_easy_callback callback_response, payment_transaction
     end
 
-    Contract CallbackResponse, PaymentTransaction => Maybe[CallbackResponse]
     # Executes payment gateway processor for PaynetEasy payment callback
     #
     # @param    callback_response     [CallbackResponse]      Callback object with data from payment gateway
@@ -112,7 +106,6 @@ module PaynetEasy::PaynetEasyApi
       callback_response
     end
 
-    Contract String => IsA[Prototype::Query]
     # Create API query object by API query method
     #
     # @param    api_query_name    [String]              API query method
@@ -122,7 +115,6 @@ module PaynetEasy::PaynetEasyApi
       query_factory.query api_query_name
     end
 
-    Contract String => IsA[CallbackPrototype]
     # Create API callback processor by callback response
     #
     # @param    callback_type   [String]              Callback response type
@@ -132,7 +124,6 @@ module PaynetEasy::PaynetEasyApi
       callback_factory.callback callback_type
     end
 
-    Contract Request => Response
     # Make request to the PaynetEasy gateway
     #
     # @param    request   [Request]     Request data
@@ -142,7 +133,6 @@ module PaynetEasy::PaynetEasyApi
       gateway_client.make_request request
     end
 
-    Contract String, Proc => Any
     # Set handler callback for processing action.
     #
     # @param    handler_name        [String]    Handler name
@@ -153,7 +143,6 @@ module PaynetEasy::PaynetEasyApi
       @handlers[handler_name] = handler_callback
     end
 
-    Contract Hash => Any
     # Set handlers. Handlers array must follow new format:
     # {<handlerName>:String => <handlerCallback>:Proc}
     #
@@ -162,7 +151,6 @@ module PaynetEasy::PaynetEasyApi
       handlers.each {|handler_name, handler_callback| set_handler handler_name, &handler_callback}
     end
 
-    Contract String => Any
     # Remove handler for processing action
     #
     # @param    handler_name    [String]    Handler name
@@ -177,24 +165,20 @@ module PaynetEasy::PaynetEasyApi
       @handlers = {}
     end
 
-    Contract None => IsA[GatewayClient]
     def gateway_client
       @gateway_client ||= GatewayClient.new
     end
 
-    Contract None => IsA[QueryFactory]
     def query_factory
       @query_factory ||= QueryFactory.new
     end
 
-    Contract None => IsA[CallbackFactory]
     def callback_factory
       @callback_factory ||= CallbackFactory.new
     end
 
     protected
 
-    Contract PaymentTransaction, IsA[Response] => Any
     # Handle query result.
     # Method calls handlers for:
     #  - HANDLER_SAVE_CHANGES            always
@@ -220,7 +204,6 @@ module PaynetEasy::PaynetEasyApi
       end
     end
 
-    Contract IsA[Exception], PaymentTransaction, Any => Any
     # Handle raised exception. If configured self::HANDLER_CATCH_EXCEPTION, handler will be called,
     # if not - exception will be raised again.
     #
@@ -235,7 +218,6 @@ module PaynetEasy::PaynetEasyApi
       call_handler HANDLER_CATCH_EXCEPTION, error, payment_transaction, response
     end
 
-    Contract String, Any => Any
     # Executes handler callback.
     # Method receives at least one parameter - handler name,
     # all other parameters will be passed to handler callback.
@@ -248,7 +230,6 @@ module PaynetEasy::PaynetEasyApi
       @handlers[handler_name].(*args) if has_handler? handler_name
     end
 
-    Contract String => Any
     # Check if handler name is allowed
     #
     # @param    handler_name    [String]    Handler name
@@ -258,7 +239,6 @@ module PaynetEasy::PaynetEasyApi
       end
     end
 
-    Contract String => Bool
     # True if processor has handler callback for given handler name
     #
     # @param    handler_name    [String]                  Handler name
