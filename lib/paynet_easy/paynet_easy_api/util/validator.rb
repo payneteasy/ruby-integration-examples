@@ -88,7 +88,7 @@ module PaynetEasy::PaynetEasyApi::Util
       begin
         valid = case rule
         when URL    then URI::ABS_URI === value
-        when IP     then IPAddr.new value
+        when IP     then !!IPAddr.new(value)
         when MONTH  then (1..12).include? value.to_i
         else
           regexp = @@rule_regexps.key?(rule) ? @@rule_regexps[rule] : rule
