@@ -61,11 +61,11 @@
 
 Ознакомиться с использованием данного метода можно в следующих файлах:
 * [Базовый пример использования библиотеки](../00-basic-tutorial.md#stage_2)
-* [Пример выполнения запроса sale](../../example/sale.rb#L91)
-* [Пример выполнения запроса preauth](../../example/preauth.rb#L91)
-* [Пример выполнения запроса sale-form](../../example/sale-form.rb#L70)
-* [Пример выполнения запроса preauth-form](../../example/preauth-form.rb#70)
-* [Пример выполнения запроса transfer-form](../../example/transfer-form.rb#70)
+* [Пример выполнения запроса sale](../../example/sale.rb#L75)
+* [Пример выполнения запроса preauth](../../example/preauth.rb#L75)
+* [Пример выполнения запроса sale-form](../../example/sale-form.rb#L60)
+* [Пример выполнения запроса preauth-form](../../example/preauth-form.rb#L60)
+* [Пример выполнения запроса transfer-form](../../example/transfer-form.rb#L60)
 
 ### <a name="process_paynet_easy_callback"></a>process_paynet_easy_callback(): обработка удаленного вызова от PaynetEasy
 
@@ -75,11 +75,11 @@
 * Платежная транзакция для обработки
 
 Ознакомиться с использованием данного метода можно в следующих файлах:
-* [Пример выполнения запроса sale](../../example/sale.rb#L102)
-* [Пример выполнения запроса preauth](../../example/preauth.rb#L102)
-* [Пример выполнения запроса sale-form](../../example/sale-form.rb#L81)
-* [Пример выполнения запроса preauth-form](../../example/preauth-form.rb#81)
-* [Пример выполнения запроса transfer-form](../../example/transfer-form.rb#81)
+* [Пример выполнения запроса sale](../../example/sale.rb#L81)
+* [Пример выполнения запроса preauth](../../example/preauth.rb#L81)
+* [Пример выполнения запроса sale-form](../../example/sale-form.rb#L66)
+* [Пример выполнения запроса preauth-form](../../example/preauth-form.rb#L66)
+* [Пример выполнения запроса transfer-form](../../example/transfer-form.rb#L66)
 
 ### <a name="set_handlers"></a> set_handlers(): установка обработчиков для различных событий, происходящих при обработке заказа
 

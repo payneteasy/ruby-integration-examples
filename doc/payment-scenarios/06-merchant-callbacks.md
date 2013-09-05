@@ -22,8 +22,8 @@ status              |
 type                |
 control             |
 
-* [Пример выполнения запроса sale](../../example/sale.rb#L102)
-* [Пример выполнения запроса preauth](../../example/preauth.rb#L102)
-* [Пример выполнения запроса sale-form](../../example/sale-form.rb#L81)
-* [Пример выполнения запроса preauth-form](../../example/preauth-form.rb#81)
-* [Пример выполнения запроса transfer-form](../../example/transfer-form.rb#81)
+* [Пример выполнения запроса sale](../../example/sale.rb#L81)
+* [Пример выполнения запроса preauth](../../example/preauth.rb#L81)
+* [Пример выполнения запроса sale-form](../../example/sale-form.rb#L66)
+* [Пример выполнения запроса preauth-form](../../example/preauth-form.rb#66)
+* [Пример выполнения запроса transfer-form](../../example/transfer-form.rb#66)
