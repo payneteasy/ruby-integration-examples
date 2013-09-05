@@ -5,6 +5,7 @@ require 'payment_data/payment_transaction'
 require 'payment_data/payment'
 require 'payment_data/customer'
 require 'payment_data/billing_address'
+require 'payment_data/credit_card'
 require 'payment_data/query_config'
 require 'transport/response'
 require 'transport/callback_response'
@@ -65,6 +66,17 @@ module PaynetEasy::PaynetEasyApi
           {
             'status'            => 'processing',
             'type'              => 'status-response',
+            'paynet-order-id'   => '_',
+            'merchant-order-id' => '_',
+            'serial-number'     => '_'
+          },
+          PaymentProcessor::HANDLER_STATUS_UPDATE
+        ],
+        [
+          'sale',
+          {
+            'status'            => 'processing',
+            'type'              => 'async-response',
             'paynet-order-id'   => '_',
             'merchant-order-id' => '_',
             'serial-number'     => '_'
@@ -240,6 +252,14 @@ module PaynetEasy::PaynetEasyApi
             'zip_code'              => '1235',
             'phone'                 => '660-485-6353',
             'cell_phone'            => '660-485-6353'
+          }),
+          'credit_card'           =>  CreditCard.new(
+          {
+            'card_printed_name'     => 'Vasya Pupkin',
+            'credit_card_number'    => '4485 9408 2237 9130',
+            'expire_month'          => '12',
+            'expire_year'           => '14',
+            'cvv2'                  => '084'
           })
         }),
         'query_config'      => QueryConfig.new(

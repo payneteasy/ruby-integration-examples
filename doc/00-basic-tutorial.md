@@ -142,13 +142,14 @@
       PaymentProcessor::HANDLER_CATCH_EXCEPTION   => ->(exception, payment_transaction, response = nil) do
         puts $_CGI.header
         puts <<HTML
-          <pre>
-            print "Exception catched.
-            print "Exception message: '#{exception.message}'
-            print "Exception backtrace:
-            #{exception.backtrace}
-          </pre>
+<pre>
+print "Exception catched.
+print "Exception message: '#{exception.message}'
+print "Exception backtrace:
+#{exception.backtrace}
+</pre>
 HTML
+        exit
       end,
       PaymentProcessor::HANDLER_SAVE_CHANGES      => ->(payment_transaction, response) do
         session = CGI::Session.new CGI.new('html5')
@@ -205,13 +206,14 @@ HTML
       PaymentProcessor::HANDLER_CATCH_EXCEPTION   => ->(exception, payment_transaction, response = nil) do
         puts $_CGI.header
         puts <<HTML
-          <pre>
-            print "Exception catched.
-            print "Exception message: '#{exception.message}'
-            print "Exception backtrace:
-            #{exception.backtrace}
-          </pre>
+<pre>
+print "Exception catched.
+print "Exception message: '#{exception.message}'
+print "Exception backtrace:
+#{exception.backtrace}
+</pre>
 HTML
+        exit
       end,
       PaymentProcessor::HANDLER_SAVE_CHANGES      => ->(payment_transaction, response) do
         session = CGI::Session.new CGI.new('html5')
@@ -220,12 +222,13 @@ HTML
       PaymentProcessor::HANDLER_FINISH_PROCESSING => ->(payment_transaction, response = nil) do
         puts $_CGI.header
         puts <<HTML
-          <pre>
-            Payment processing finished.
-            Payment status: '#{payment_transaction.payment.status}'
-            Payment transaction status: '#{payment_transaction.status}'
-          </pre>
+<pre>
+Payment processing finished.
+Payment status: '#{payment_transaction.payment.status}'
+Payment transaction status: '#{payment_transaction.status}'
+</pre>
 HTML
+        exit
       end
     })
     ```

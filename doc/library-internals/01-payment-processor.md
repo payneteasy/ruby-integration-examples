@@ -129,12 +129,14 @@ paymentProcessor.set_handlers(
       $_SESSION['payment_transaction'] = Marshal.dump payment_transaction
     end,
     PaymentProcessor::HANDLER_STATUS_UPDATE     => ->(response, payment_transaction) do
-      current_location = "http://#{ENV['HTTP_HOST']}/#{ENV['REQUEST_URI']}?stage=updateStatus"
+      current_location = "http://#{ENV['HTTP_HOST']}#{ENV['SCRIPT_NAME']}?stage=updateStatus"
       puts $_CGI.header('status' => 'REDIRECT', 'location' => current_location)
+      exit
     end,
     PaymentProcessor::HANDLER_SHOW_HTML         => ->(response, payment_transaction) do
       puts $_CGI.header
       puts response.html
+      exit
     end,
     PaymentProcessor::HANDLER_REDIRECT          => ->(response, payment_transaction) do
       puts $_CGI.header('status' => 'REDIRECT', 'location' => response.redirect_url)
@@ -143,23 +145,25 @@ paymentProcessor.set_handlers(
     PaymentProcessor::HANDLER_FINISH_PROCESSING => ->(payment_transaction, response = nil) do
       puts $_CGI.header
       puts <<HTML
-        <pre>
-          Payment processing finished.
-          Payment status: '#{payment_transaction.payment.status}'
-          Payment transaction status: '#{payment_transaction.status}'
-        </pre>
+<pre>
+Payment processing finished.
+Payment status: '#{payment_transaction.payment.status}'
+Payment transaction status: '#{payment_transaction.status}'
+</pre>
 HTML
+      exit
     end,
     PaymentProcessor::HANDLER_CATCH_EXCEPTION   => ->(exception, payment_transaction, response = nil) do
       puts $_CGI.header
       puts <<HTML
-        <pre>
-          Exception catched.
-          Exception message: '#{exception.message}'
-          Exception backtrace:
-          #{exception.backtrace}
-        </pre>
+<pre>
+Exception catched.
+Exception message: '#{exception.message}'
+Exception backtrace:
+#{exception.backtrace}
+</pre>
 HTML
+      exit
     end
 })
 ```

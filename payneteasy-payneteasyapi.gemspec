@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name                  = 'payneteasy-payneteasyapi'
-  s.version               = '0.1.2'
+  s.version               = '0.9.0'
   s.summary               = 'Ruby library for PaynetEasy payment API.'
   s.author                = 'Artem Ponomarenko'
   s.email                 = 'imenem@inbox.ru'

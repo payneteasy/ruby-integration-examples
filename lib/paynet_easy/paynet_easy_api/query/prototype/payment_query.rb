@@ -42,6 +42,16 @@ module PaynetEasy::PaynetEasyApi::Query::Prototype
 
     protected
 
+    # @param    payment_transaction   [PaymentTransaction]    Payment transaction
+    # @param    response              [Response]              Response for payment transaction updating
+    def update_payment_transaction_on_success(payment_transaction, response)
+      super payment_transaction, response
+
+      if response.processing?
+        response.needed_action = Response::NEEDED_STATUS_UPDATE
+      end
+    end
+
     # @param    payment_transaction   [PaymentTransaction]
     def validate_payment_transaction(payment_transaction)
       if payment_transaction.payment.has_processing_transaction?
